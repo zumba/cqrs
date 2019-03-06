@@ -1,12 +1,12 @@
 <?php
 
-namespace Zumba\CQRS\Command\Middleware;
+namespace Zumba\CQRS\Middleware;
 
-use \Zumba\CQRS\Command\Command,
-	\Zumba\CQRS\Command\Response,
+use \Zumba\CQRS\DTO,
+	\Zumba\CQRS\Response,
 	\Zumba\Util\Log;
 
-class Logger implements \Zumba\CQRS\Command\Middleware {
+class Logger implements \Zumba\CQRS\Middleware {
 
 	/**
 	 * Log level to use for all logging.
@@ -30,10 +30,10 @@ class Logger implements \Zumba\CQRS\Command\Middleware {
 	}
 
 	/**
-	 * Log the command
+	 * Log the DTO
 	 */
-	public function handle(Command $command, callable $next) : Response {
-		Log::write(sprintf('Command dispatched to handlers: %s', get_class($command)), $this->level, 'command');
+	public function handle(DTO $dto, callable $next) : Response {
+		Log::write(sprintf('DTO dispatched to handlers: %s', get_class($dto)), $this->level, 'cqrs');
 		return $next($command);
 	}
 }

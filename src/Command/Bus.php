@@ -3,8 +3,7 @@
 namespace Zumba\CQRS\Command;
 
 use \Zumba\Util\Log,
-	\Zumba\CQRS\Command\Middleware\Logger,
-	\Zumba\CQRS\Command\Middleware\Locator;
+	\Zumba\CQRS\Command\Middleware\Logger;
 
 class Bus {
 

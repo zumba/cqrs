@@ -2,6 +2,8 @@
 
 namespace Zumba\CQRS\Command;
 
+use \Zumba\CQRS\Middleware;
+
 class Bus {
 
 	/**

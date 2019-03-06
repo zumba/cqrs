@@ -34,6 +34,6 @@ class Logger implements \Zumba\CQRS\Middleware {
 	 */
 	public function handle(DTO $dto, callable $next) : Response {
 		Log::write(sprintf('DTO dispatched to handlers: %s', get_class($dto)), $this->level, 'cqrs');
-		return $next($command);
+		return $next($dto);
 	}
 }

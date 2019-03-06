@@ -1,7 +1,7 @@
 <?php
 namespace Zumba\CQRS\Command;
 
-abstract class Response {
+abstract class Response implements \Zumba\CQRS\Response {
 
 	/**
 	 * Command Response
@@ -12,14 +12,14 @@ abstract class Response {
 	/**
 	 * Create a Success Response.
 	 */
-	public static function ok() : Response {
+	public static function ok() : \Zumba\CQRS\Response {
 		return Success::make();
 	}
 
 	/**
 	 * Create a Failure Response.
 	 */
-	public static function fail(\Throwable $e) : Response {
+	public static function fail(\Throwable $e) : \Zumba\CQRS\Response {
 		return Failure::fromThrowable($e);
 	}
 }

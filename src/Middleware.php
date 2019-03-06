@@ -1,14 +1,14 @@
 <?php
 
-namespace Zumba\CQRS\Command;
+namespace Zumba\CQRS;
 
 interface Middleware {
 
 	/**
-	 * Pipe a command through middleware.
+	 * Pipe a DTO through middleware.
 	 *
 	 * Receives the next middleware as an argument.  Only call $next if the middleware needs
 	 * the chain to continue.
 	 */
-	public function handle(Command $command, callable $next) : Response;
+	public function handle(DTO $dto, callable $next) : Response;
 }

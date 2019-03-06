@@ -4,22 +4,24 @@ namespace Zumba\Test\CQRS\Command;
 
 use \Zumba\CQRS\Command\Bus,
 	\Zumba\CQRS\Command\Command,
-	\Zumba\CQRS\Command\Middleware,
 	\Zumba\CQRS\Command\Handler,
 	\Zumba\CQRS\Command\Provider,
 	\Zumba\CQRS\Command\Response,
 	\Zumba\CQRS\Command\Success,
-	\Zumba\CQRS\Command\Failure;
+	\Zumba\CQRS\Command\Failure,
+	\Zumba\CQRS\Middleware,
+	\Zumba\CQRS\DTO,
+	\Zumba\CQRS\Response as ResponseInterface;
 
 
 class OkMiddleware implements Middleware {
-	public function handle(Command $command, callable $next) : Response {
-		return $next($command);
+	public function handle(DTO $dto, callable $next) : ResponseInterface {
+		return $next($dto);
 	}
 }
 
 class FailMiddleware implements Middleware {
-	public function handle(Command $command, callable $next) : Response {
+	public function handle(DTO $dto, callable $next) : ResponseInterface {
 		return Response::fail(new \Exception('failed'));
 	}
 }

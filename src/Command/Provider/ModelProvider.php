@@ -4,7 +4,7 @@ namespace Zumba\CQRS\Command\Provider;
 
 use \Zumba\CQRS\Command\Command,
 	\Zumba\CQRS\Command\Handler,
-	\Zumba\CQRS\Command\HandlerFactory\ModelInjector;
+	\Zumba\CQRS\ModelDependencyLoader;
 
 /**
  * ModelProvider attempts to build the handler by injecting models into the constructor.
@@ -16,7 +16,12 @@ class ModelProvider implements \Zumba\CQRS\Command\Provider {
 	 */
 	public function getHandler(Command $command) : ? Handler {
 		try {
-			return ModelInjector::make(get_class($command) . "Handler");
+			$handler = get_class($command) . "Handler";
+			$dependencies = ModelDependencyLoader::extract($handler);
+			if (empty($dependencies)) {
+				return null;
+			}
+			return new $handler(...$dependencies);
 		} catch (\LogicException $e) {
 			// if there was a logic exception, then the developer did something wrong so we should
 			// bubble it so they get a nice error message.

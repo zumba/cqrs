@@ -2,8 +2,6 @@
 
 namespace Zumba\CQRS\Command;
 
-use \Zumba\Primer\Base\Model;
-
 interface HandlerFactory {
 
 	/**

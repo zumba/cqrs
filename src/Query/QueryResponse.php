@@ -1,7 +1,9 @@
 <?php
 namespace Zumba\CQRS\Query;
 
-abstract class Response implements \Zumba\CQRS\Response {
+use \Zumba\CQRS\Response;
+
+abstract class QueryResponse implements Response {
 
 	/**
 	 * Query Response
@@ -12,14 +14,14 @@ abstract class Response implements \Zumba\CQRS\Response {
 	/**
 	 * Create a Success Response.
 	 */
-	public static function ok() : \Zumba\CQRS\Response {
+	public static function ok() : Response {
 
 	}
 
 	/**
 	 * Create a Failed Response.
 	 */
-	public static function fail(\Throwable $e) : \Zumba\CQRS\Response {
+	public static function fail(\Throwable $e) : Response {
 
 	}
 }

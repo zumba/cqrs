@@ -31,6 +31,12 @@ class CommandBus {
 	 * Pass the command to the DTO Bus.
 	 */
 	public function dispatch(Command $command) : CommandResponse {
-		return $this->bus->dispatch($command);
+		$response = $this->bus->dispatch($command);
+		if ($response instanceof CommandResponse) {
+			return $response;
+		}
+		throw new \Zumba\CQRS\InvalidResponse(
+			"Command Handler must return an instance of " . CommandResponse::class
+		);
 	}
 }

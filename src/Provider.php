@@ -1,6 +1,6 @@
 <?php
 
-namespace Zumba\CQRS\Command;
+namespace Zumba\CQRS;
 
 interface Provider {
 
@@ -11,5 +11,5 @@ interface Provider {
 	 *
 	 * @return Handler | null
 	 */
-	public function getHandler(Command $command) : ? Handler;
+	public function getHandler(DTO $dto) : ? Handler;
 }

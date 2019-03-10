@@ -1,8 +1,8 @@
 <?php
 
-namespace Zumba\CQRS\Command;
+namespace Zumba\CQRS\Command\Response;
 
-class Success extends Response {
+class Success extends \Zumba\CQRS\Command\CommandResponse {
 
 	/**
 	 * Create a new Success response.

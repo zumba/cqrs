@@ -1,6 +1,6 @@
 <?php
 
-namespace Zumba\CQRS\Command;
+namespace Zumba\CQRS;
 
 interface HandlerFactory {
 

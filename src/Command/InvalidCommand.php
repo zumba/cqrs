@@ -1,5 +1,5 @@
 <?php
 namespace Zumba\CQRS\Command;
 
-class InvalidCommand extends \UnexpectedValueException {
+class InvalidCommand extends \Zumba\CQRS\InvalidDTO {
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Zumba\CQRS\Command;
+namespace Zumba\CQRS\Command\Response;
 
-class Failure extends Response {
+class Failure extends \Zumba\CQRS\Command\CommandResponse {
 
 	/**
 	 * @var \Throwable

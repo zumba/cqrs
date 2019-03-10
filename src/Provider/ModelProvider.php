@@ -1,13 +1,37 @@
 <?php
 
-namespace Zumba\CQRS;
+namespace Zumba\CQRS\Provider;
 
-use \Zumba\Primer\Base\Model;
+use \Zumba\CQRS\DTO,
+	\Zumba\CQRS\Handler,
+	\Zumba\Primer\Base\Model;
 
 /**
- * ModelDependencyLoader tries to identify and instantiate models from a class name constructor
+ * ModelProvider attempts to build the handler by injecting models into the constructor.
  */
-class ModelDependencyLoader {
+class ModelProvider implements \Zumba\CQRS\Provider {
+
+	/**
+	 * Build a dto handler by attempting to inject models.
+	 */
+	public function getHandler(DTO $dto) : ? Handler {
+		try {
+			$handler = get_class($dto) . "Handler";
+			$dependencies = static::extract($handler);
+			if (empty($dependencies)) {
+				return null;
+			}
+			return new $handler(...$dependencies);
+		} catch (\LogicException $e) {
+			// if there was a logic exception, then the developer did something wrong so we should
+			// bubble it so they get a nice error message.
+			throw $e;
+		} catch (\Throwable $e) {
+			// Any other problem should just return null.  This way some other provider might
+			// be able to build the handler.
+			return null;
+		}
+	}
 
 	/**
 	 * Extract model Dependencies
@@ -15,7 +39,7 @@ class ModelDependencyLoader {
 	 * @throws \LogicException if you're doing something wrong.
 	 * @return array of zumba models
 	 */
-	public static function extract(string $className) : array {
+	protected static function extract(string $className) : array {
 		if (!class_exists($className)) {
 			throw new \LogicException(
 				"Undefined class: $className"

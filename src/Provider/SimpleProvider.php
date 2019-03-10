@@ -1,21 +1,21 @@
 <?php
 
-namespace Zumba\CQRS\Command\Provider;
+namespace Zumba\CQRS\Provider;
 
-use \Zumba\CQRS\Command\Command,
-	\Zumba\CQRS\Command\Handler,
-	\Zumba\CQRS\Command\HandlerFactory;
+use \Zumba\CQRS\DTO,
+	\Zumba\CQRS\Handler,
+	\Zumba\CQRS\HandlerFactory;
 
 /**
  * SimpleProvider attempts to build the handler with no dependencies by calling new
  */
-class SimpleProvider implements \Zumba\CQRS\Command\Provider {
+class SimpleProvider implements \Zumba\CQRS\Provider {
 
 	/**
-	 * Build a command handler.
+	 * Build a dto handler.
 	 */
-	public function getHandler(Command $command) : ? Handler {
-		$handlerName = get_class($command) . "Handler";
+	public function getHandler(DTO $dto) : ? Handler {
+		$handlerName = get_class($dto) . "Handler";
 		if (!class_exists($handlerName)) {
 			return null;
 		}

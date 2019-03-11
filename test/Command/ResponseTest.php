@@ -2,18 +2,19 @@
 
 namespace Zumba\Test\CQRS\Command;
 
-use \Zumba\CQRS\Command\Response,
-	\Zumba\CQRS\Command\Success,
-	\Zumba\CQRS\Command\Failure;
+use \Zumba\CQRS\Command\CommandResponse,
+	\Zumba\CQRS\Command\Response\Success,
+	\Zumba\CQRS\Command\Response\Failure;
 
 /**
+ * @group cqrs
  * @group command
  */
 class ResponseTest extends \Zumba\Service\Test\TestCase {
 	public function testOk() {
-		$this->assertInstanceOf(Success::class, Response::ok());
+		$this->assertInstanceOf(Success::class, CommandResponse::ok());
 	}
 	public function testFail() {
-		$this->assertInstanceOf(Failure::class, Response::fail(new \Exception()));
+		$this->assertInstanceOf(Failure::class, CommandResponse::fail(new \Exception()));
 	}
 }

@@ -1,37 +1,42 @@
 <?php
 
-namespace Zumba\Test\CQRS\Command;
+namespace Zumba\Test\CQRS;
 
-use \Zumba\CQRS\Command\Bus,
-	\Zumba\CQRS\Command\Command,
-	\Zumba\CQRS\Command\Handler,
-	\Zumba\CQRS\Command\Provider,
-	\Zumba\CQRS\Command\Response,
-	\Zumba\CQRS\Command\Success,
-	\Zumba\CQRS\Command\Failure,
-	\Zumba\CQRS\Middleware,
+use \Zumba\CQRS\Bus,
 	\Zumba\CQRS\DTO,
-	\Zumba\CQRS\Response as ResponseInterface;
+	\Zumba\CQRS\Handler,
+	\Zumba\CQRS\Provider,
+	\Zumba\CQRS\Response,
+	\Zumba\CQRS\Middleware;
 
+class TestResponse implements Response {
+	public static function ok() : Response {
+		return new static();
+	}
+	public static function fail(\Throwable $e) : Response {
+		return new static();
+	}
+}
 
 class OkMiddleware implements Middleware {
-	public function handle(DTO $dto, callable $next) : ResponseInterface {
+	public function handle(DTO $dto, callable $next) : Response {
 		return $next($dto);
 	}
 }
 
 class FailMiddleware implements Middleware {
-	public function handle(DTO $dto, callable $next) : ResponseInterface {
-		return Response::fail(new \Exception('failed'));
+	public function handle(DTO $dto, callable $next) : Response {
+		return TestResponse::fail(new \Exception('failed'));
 	}
 }
 
+
 /**
- * @group command
+ * @group cqrs
  */
 class BusTest extends \Zumba\Service\Test\TestCase {
 	public function testHandle() {
-		$command = $this->getMockBuilder(Command::class)->getMock();
+		$command = $this->getMockBuilder(DTO::class)->getMock();
 		$middle = $this->getMockBuilder(OkMiddleware::class)
 			->setMethods(['handle'])
 			->getMock();
@@ -66,7 +71,7 @@ class BusTest extends \Zumba\Service\Test\TestCase {
 	}
 
 	public function testHandleMiddlewareFailure() {
-		$command = $this->getMockBuilder(Command::class)->getMock();
+		$command = $this->getMockBuilder(DTO::class)->getMock();
 		$middle = $this->getMockBuilder(OkMiddleware::class)
 			->setMethods(['handle'])
 			->getMock();

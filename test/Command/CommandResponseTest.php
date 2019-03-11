@@ -10,7 +10,7 @@ use \Zumba\CQRS\Command\CommandResponse,
  * @group cqrs
  * @group command
  */
-class ResponseTest extends \Zumba\Service\Test\TestCase {
+class CommandResponseTest extends \Zumba\Service\Test\TestCase {
 	public function testOk() {
 		$this->assertInstanceOf(Success::class, CommandResponse::ok());
 	}

@@ -29,6 +29,8 @@ class CommandBus {
 
 	/**
 	 * Pass the command to the DTO Bus.
+	 *
+	 * @throws \Zumba\CQRS\InvalidResponse if handler does not return a CommandResponse
 	 */
 	public function dispatch(Command $command) : CommandResponse {
 		$response = $this->bus->dispatch($command);

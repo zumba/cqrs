@@ -29,8 +29,16 @@ class QueryBus {
 
 	/**
 	 * Pass the Query to the DTO Bus.
+	 *
+	 * @throws \Zumba\CQRS\InvalidResponse if handler does not return a QueryResponse
 	 */
 	public function dispatch(Query $query) : QueryResponse {
-		return $this->bus->dispatch($query);
+		$response = $this->bus->dispatch($query);
+		if ($response instanceof QueryResponse) {
+			return $response;
+		}
+		throw new \Zumba\CQRS\InvalidResponse(
+			"Query Handler must return an instance of " . QueryResponse::class
+		);
 	}
 }

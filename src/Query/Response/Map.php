@@ -62,19 +62,21 @@ class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, 
 	 *
 	 * @param mixed $offset
 	 * @param mixed $value
+	 * @throws \Zumba\CQRS\InvalidResponse
 	 * @see \ArrayAccess
 	 */
 	public function offsetSet($offset, $value) : void {
-		$this->data[$offset] = $value;
+		throw new \Zumba\CQRS\InvalidResponse(static::class . " is not mutable.");
 	}
 
 	/**
 	 * ArrayAccess implementation
 	 *
 	 * @param mixed $offset
+	 * @throws \Zumba\CQRS\InvalidResponse
 	 * @see \ArrayAccess
 	 */
 	public function offsetUnset($offset) : void {
-		unset($this->data[$offset]);
+		throw new \Zumba\CQRS\InvalidResponse(static::class . " is not mutable.");
 	}
 }

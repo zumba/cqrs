@@ -10,9 +10,6 @@ use \Zumba\CQRS\Bus,
 	\Zumba\CQRS\Middleware;
 
 class TestResponse implements Response {
-	public static function ok() : Response {
-		return new static();
-	}
 	public static function fail(\Throwable $e) : Response {
 		return new static();
 	}

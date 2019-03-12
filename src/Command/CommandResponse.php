@@ -18,6 +18,8 @@ abstract class CommandResponse implements \Zumba\CQRS\Response {
 
 	/**
 	 * Create a Failure Response.
+	 *
+	 * @see \Zumba\CQRS\Response
 	 */
 	public static function fail(\Throwable $e) : \Zumba\CQRS\Response {
 		return Response\Failure::fromThrowable($e);

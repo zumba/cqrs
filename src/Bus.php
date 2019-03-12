@@ -49,15 +49,11 @@ class Bus {
 	 * Pass the DTO through the middleware.
 	 */
 	public function dispatch(DTO $dto) : Response {
-		try {
-			$next = $this->middleware;
-			if (!empty($next)) {
-				return $next($dto);
-			}
-			return $this->delegate($dto);
-		} catch(\Throwable $e) {
-			return Response::fail($e);
+		$next = $this->middleware;
+		if (!empty($next)) {
+			return $next($dto);
 		}
+		return $this->delegate($dto);
 	}
 
 	/**

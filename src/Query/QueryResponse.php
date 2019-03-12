@@ -22,6 +22,6 @@ abstract class QueryResponse implements Response {
 	 * Create a Failed Response.
 	 */
 	public static function fail(\Throwable $e) : Response {
-
+		return \Zumba\CQRS\Query\Response\Failure::fromThrowable($e);
 	}
 }

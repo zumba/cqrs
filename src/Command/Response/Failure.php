@@ -12,9 +12,9 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse {
 	/**
 	 * Create a new Failure response from a Throwable.
 	 *
-	 * Use \Zumba\CQRS\Command\Response::fail() to create this response object.
+	 * Use \Zumba\CQRS\Command\CommandResponse::fail() to create this response object.
 	 *
-	 * @see \Zumba\CQRS\Command\Response::fail
+	 * @see \Zumba\CQRS\Command\CommandResponse::fail
 	 */
 	protected static function fromThrowable(\Throwable $error) : Failure {
 		$response = new static();

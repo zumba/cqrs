@@ -2,7 +2,7 @@
 
 namespace Zumba\CQRS\Command\Response;
 
-class Failure extends \Zumba\CQRS\Command\CommandResponse {
+class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerializable {
 
 	/**
 	 * @var \Throwable
@@ -27,5 +27,16 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse {
 	 */
 	public function error() : \Throwable {
 		return $this->error;
+	}
+
+	/**
+	 * JsonSerializable implementation
+	 *
+	 * @see \JsonSerializable
+	 * @return mixed
+	 */
+	public function jsonSerialize() {
+		$error = $this->error->getMessage();
+		return compact('error');
 	}
 }

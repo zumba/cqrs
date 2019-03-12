@@ -2,7 +2,7 @@
 
 namespace Zumba\CQRS\Command\Response;
 
-class Success extends \Zumba\CQRS\Command\CommandResponse {
+class Success extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerializable {
 
 	/**
 	 * Create a new Success response.
@@ -13,5 +13,15 @@ class Success extends \Zumba\CQRS\Command\CommandResponse {
 	 */
 	protected static function make() : Success {
 		return new static();
+	}
+
+	/**
+	 * JsonSerializable implementation
+	 *
+	 * @see \JsonSerializable
+	 * @return mixed
+	 */
+	public function jsonSerialize() {
+		return [];
 	}
 }

@@ -16,7 +16,7 @@ class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, 
 	 *
 	 * @see \Zumba\CQRS\Query\QueryResponse::map
 	 */
-	protected static function fromArray(array $value) : Map {
+	protected static function fromArray(array $data) : Map {
 		$response = new static();
 		$response->data = $data;
 		return $response;

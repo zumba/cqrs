@@ -36,14 +36,12 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 	/**
 	 * Extract model Dependencies
 	 *
-	 * @throws \LogicException if you're doing something wrong.
+	 * @throws InvalidDependency if you're doing something wrong.
 	 * @return array of zumba models
 	 */
 	protected static function extract(string $className) : array {
 		if (!class_exists($className)) {
-			throw new \LogicException(
-				"Undefined class: $className"
-			);
+			throw new InvalidDependency("Undefined class: $className");
 		}
 		$image = new \ReflectionClass($className);
 		$constructor = $image->getConstructor();
@@ -71,10 +69,10 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 	/**
 	 * Fail with a nice developer message.
 	 *
-	 * @throws \LogicException
+	 * @throws InvalidDependency
 	 */
 	protected static function fail(\ReflectionParameter $parameter) : Response {
-		throw new \LogicException(sprintf(
+		throw new InvalidDependency(sprintf(
 			"Don't be a night elf! `%s %s` is not a `%s`.",
 			$parameter->getClass()->getName(),
 			"$" . $parameter->getName(),

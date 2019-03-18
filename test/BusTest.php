@@ -87,7 +87,7 @@ class BusTest extends \Zumba\Service\Test\TestCase {
 	}
 
 	/**
-	 * @expectedException \Zumba\CQRS\MissingHandler
+	 * @expectedException \Zumba\CQRS\InvalidHandler
 	 */
 	public function testDelegateNotFound() {
 		$dto = $this->getMockBuilder(DTO::class)->getMock();

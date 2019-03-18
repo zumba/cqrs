@@ -85,4 +85,23 @@ class BusTest extends \Zumba\Service\Test\TestCase {
 		$bus->attachMiddleware(new OkMiddleware(), new FailMiddleware());
 		$bus->dispatch($command);
 	}
+
+	/**
+	 * @expectedException \Zumba\CQRS\MissingHandler
+	 */
+	public function testDelegateNotFound() {
+		$dto = $this->getMockBuilder(DTO::class)->getMock();
+		$provider = $this->getMockBuilder(Provider::class)
+			->setMethods(['getHandler'])
+			->getMock();
+
+		$provider
+			->expects($this->once())
+			->method('getHandler')
+			->with($dto)
+			->will($this->returnValue(null));
+
+		$bus = Bus::withProviders($provider);
+		$bus->delegate($dto);
+	}
 }

@@ -59,7 +59,7 @@ class Bus {
 	/**
 	 * Delegate the DTO to a handler using the providers to build the handler.
 	 *
-	 * @throws \LogicException if a handler cannot be found.
+	 * @throws MissingHandler if a handler cannot be found.
 	 */
 	public function delegate(DTO $dto) : Response {
 		$handler = null;
@@ -69,6 +69,6 @@ class Bus {
 				return $handler->handle($dto);
 			}
 		}
-		throw new \LogicException("Could not find a handler for " . get_class($dto));
+		throw new MissingHandler("Could not find a handler for " . get_class($dto));
 	}
 }

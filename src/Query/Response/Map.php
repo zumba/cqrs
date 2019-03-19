@@ -33,7 +33,7 @@ class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, 
 	}
 
 	public function __toString() : string {
-		return implode(",", $this->data);
+		return json_encode($this->data);
 	}
 
 	/**

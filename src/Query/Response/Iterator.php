@@ -29,7 +29,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	 *
 	 * @see \Zumba\CQRS\Query\QueryResponse::iterator
 	 */
-	protected static function fromIterator(\Iterator $value) : Iterator {
+	protected static function fromIterator(\Iterator $data) : Iterator {
 		$response = new static();
 		$response->data = $data;
 		return $response;
@@ -46,7 +46,10 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	}
 
 	public function __toString() : string {
-		return implode(",", $this->jsonSerialize());
+		if ($this->data->valid()) {
+			return json_encode($this->jsonSerialize());
+		}
+		return "Invalid Iterator.";
 	}
 
 	/**

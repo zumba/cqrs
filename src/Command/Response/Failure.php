@@ -33,7 +33,7 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
 	 * JsonSerializable implementation
 	 *
 	 * @see \JsonSerializable
-	 * @return mixed
+	 * @return array
 	 */
 	public function jsonSerialize() {
 		$error = $this->error->getMessage();

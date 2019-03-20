@@ -26,7 +26,7 @@ class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, 
 	 * JsonSerializable implementation
 	 *
 	 * @see \JsonSerializable
-	 * @return mixed
+	 * @return array
 	 */
 	public function jsonSerialize() {
 		return $this->data;

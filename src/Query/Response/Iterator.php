@@ -39,7 +39,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	 * JsonSerializable implementation
 	 *
 	 * @see \JsonSerializable
-	 * @return mixed
+	 * @return array
 	 */
 	public function jsonSerialize() {
 		return iterator_to_array($this->data);

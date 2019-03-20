@@ -31,7 +31,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	 */
 	protected static function fromIterator(\Iterator $data) : Iterator {
 		$response = new static();
-		$response->data = $value;
+		$response->data = $data;
 		return $response;
 	}
 

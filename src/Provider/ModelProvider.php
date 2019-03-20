@@ -5,7 +5,8 @@ namespace Zumba\CQRS\Provider;
 use \Zumba\CQRS\DTO,
 	\Zumba\CQRS\Handler,
 	\Zumba\CQRS\Response,
-	\Zumba\Primer\Base\Model;
+	\Zumba\Primer\Base\Model,
+	\Zumba\Util\Log;
 
 /**
  * ModelProvider attempts to build the handler by injecting models into the constructor.
@@ -30,6 +31,7 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 		} catch (\Throwable $e) {
 			// Any other problem should just return null.  This way some other provider might
 			// be able to build the handler.
+			Log::write(sprintf("%s could not resolve handler for %s", __CLASS__, get_class($dto)), Log::LEVEL_INFO, 'cqrs');
 			return null;
 		}
 	}

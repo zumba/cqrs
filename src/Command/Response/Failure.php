@@ -25,7 +25,7 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
 	/**
 	 * Get the Throwable.
 	 */
-	public function error() : \Throwable {
+	public function getError() : \Throwable {
 		return $this->error;
 	}
 

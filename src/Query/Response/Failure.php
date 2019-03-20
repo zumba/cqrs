@@ -25,7 +25,7 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 	/**
 	 * Get the Throwable.
 	 */
-	public function error() : \Throwable {
+	public function getError() : \Throwable {
 		return $this->error;
 	}
 

@@ -13,6 +13,6 @@ class FailureTest extends \Zumba\Service\Test\TestCase {
 	public function testError() {
 		$e = new \Exception('test');
 		$response = QueryResponse::fail($e);
-		$this->assertSame($e, $response->error());
+		$this->assertSame($e, $response->getError());
 	}
 }

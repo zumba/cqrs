@@ -12,11 +12,11 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
 	/**
 	 * Create a new Failure response from a Throwable.
 	 *
-	 * Use \Zumba\CQRS\Command\CommandResponse::fail() to create this response object.
+	 * Use \Zumba\CQRS\Command\CommandResponse::fromThrowable() to create this response object.
 	 *
-	 * @see \Zumba\CQRS\Command\CommandResponse::fail
+	 * @see \Zumba\CQRS\Command\CommandResponse::fromThrowable
 	 */
-	protected static function fromThrowable(\Throwable $error) : Failure {
+	protected static function make(\Throwable $error) : Failure {
 		$response = new static();
 		$response->error = $error;
 		return $response;

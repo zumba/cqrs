@@ -12,11 +12,11 @@ class Scalar extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializabl
 	/**
 	 * Create a new Scalar response.
 	 *
-	 * Use \Zumba\CQRS\Query\QueryResponse::scalar to create this response object.
+	 * Use \Zumba\CQRS\Query\QueryResponse::fromScalar to create this response object.
 	 *
 	 * @param mixed $value Any scalar value (integer|float|string|boolean)
 	 * @throws \Zumba\CQRS\InvalidResponse if the value is not scalar.
-	 * @see \Zumba\CQRS\Query\QueryResponse::scalar
+	 * @see \Zumba\CQRS\Query\QueryResponse::fromScalar
 	 */
 	protected static function from($value) : Scalar {
 		if (!is_scalar($value)) {

@@ -10,7 +10,7 @@ use \Zumba\CQRS\Bus,
 	\Zumba\CQRS\Middleware;
 
 class TestResponse implements Response {
-	public static function fail(\Throwable $e) : Response {
+	public static function fromThrowable(\Throwable $e) : Response {
 		return new static();
 	}
 }
@@ -23,7 +23,7 @@ class OkMiddleware implements Middleware {
 
 class FailMiddleware implements Middleware {
 	public function handle(DTO $dto, callable $next) : Response {
-		return TestResponse::fail(new \Exception('failed'));
+		return TestResponse::fromThrowable(new \Exception('failed'));
 	}
 }
 

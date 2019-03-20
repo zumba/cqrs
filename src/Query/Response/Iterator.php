@@ -12,9 +12,9 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	/**
 	 * Create a new Iterator response from an array
 	 *
-	 * Use \Zumba\CQRS\Query\QueryResponse::list to create this response object.
+	 * Use \Zumba\CQRS\Query\QueryResponse::fromList to create this response object.
 	 *
-	 * @see \Zumba\CQRS\Query\QueryResponse::list
+	 * @see \Zumba\CQRS\Query\QueryResponse::fromList
 	 */
 	protected static function fromArray(array $data) : Iterator {
 		$response = new static();
@@ -25,11 +25,11 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	/**
 	 * Create a new Iterator response from an \Iterator (e.g. a Generator)
 	 *
-	 * Use \Zumba\CQRS\Query\QueryResponse::iterator to create this response object.
+	 * Use \Zumba\CQRS\Query\QueryResponse::fromIterator to create this response object.
 	 *
-	 * @see \Zumba\CQRS\Query\QueryResponse::iterator
+	 * @see \Zumba\CQRS\Query\QueryResponse::fromIterator
 	 */
-	protected static function fromIterator(\Iterator $data) : Iterator {
+	public static function fromIterator(\Iterator $data) : Iterator {
 		$response = new static();
 		$response->data = $data;
 		return $response;

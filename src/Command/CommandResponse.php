@@ -12,7 +12,7 @@ abstract class CommandResponse implements \Zumba\CQRS\Response {
 	/**
 	 * Create a Success Response.
 	 */
-	public static function ok() : \Zumba\CQRS\Response {
+	public static function fromSuccess() : \Zumba\CQRS\Response {
 		return Response\Success::make();
 	}
 
@@ -21,7 +21,7 @@ abstract class CommandResponse implements \Zumba\CQRS\Response {
 	 *
 	 * @see \Zumba\CQRS\Response
 	 */
-	public static function fail(\Throwable $e) : \Zumba\CQRS\Response {
-		return Response\Failure::fromThrowable($e);
+	public static function fromThrowable(\Throwable $e) : \Zumba\CQRS\Response {
+		return Response\Failure::make($e);
 	}
 }

@@ -7,5 +7,5 @@ interface Response {
 	/**
 	 * Create a Failed Response.
 	 */
-	public static function fail(\Throwable $e) : Response;
+	public static function fromThrowable(\Throwable $e) : Response;
 }

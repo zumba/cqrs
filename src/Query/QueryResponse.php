@@ -19,8 +19,8 @@ abstract class QueryResponse implements Response {
 	 *
 	 * @see \Zumba\CQRS\Response
 	 */
-	public static function fail(\Throwable $e) : Response {
-		return \Zumba\CQRS\Query\Response\Failure::fromThrowable($e);
+	public static function fromThrowable(\Throwable $e) : Response {
+		return \Zumba\CQRS\Query\Response\Failure::make($e);
 	}
 
 	/**
@@ -28,28 +28,28 @@ abstract class QueryResponse implements Response {
 	 *
 	 * @param mixed $value Any scalar value (integer|float|string|boolean)
 	 */
-	public static function scalar($value) : Scalar {
+	public static function fromScalar($value) : Scalar {
 		return Scalar::from($value);
 	}
 
 	/**
 	 * Get a map of key / value pairs. (e.g. data representing an entity)
 	 */
-	public static function map(array $item) : Map {
+	public static function fromMap(array $item) : Map {
 		return Map::fromArray($item);
 	}
 
 	/**
 	 * Get an iterator response from an array. (e.g. a list of things)
 	 */
-	public static function list(array $items) : Iterator {
+	public static function fromList(array $items) : Iterator {
 		return Iterator::fromArray($items);
 	}
 
 	/**
 	 * Get an iterator response from an Iterator. (e.g. a generator)
 	 */
-	public static function iterator(\Iterator $items) : Iterator {
+	public static function fromIterator(\Iterator $items) : Iterator {
 		return Iterator::fromIterator($items);
 	}
 }

@@ -12,7 +12,7 @@ use \Zumba\CQRS\Query\QueryResponse,
 class FailureTest extends \Zumba\Service\Test\TestCase {
 	public function testError() {
 		$e = new \Exception('test');
-		$response = QueryResponse::fail($e);
+		$response = QueryResponse::fromThrowable($e);
 		$this->assertSame($e, $response->getError());
 	}
 }

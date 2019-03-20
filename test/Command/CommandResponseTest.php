@@ -12,9 +12,9 @@ use \Zumba\CQRS\Command\CommandResponse,
  */
 class CommandResponseTest extends \Zumba\Service\Test\TestCase {
 	public function testOk() {
-		$this->assertInstanceOf(Success::class, CommandResponse::ok());
+		$this->assertInstanceOf(Success::class, CommandResponse::fromSuccess());
 	}
 	public function testFail() {
-		$this->assertInstanceOf(Failure::class, CommandResponse::fail(new \Exception()));
+		$this->assertInstanceOf(Failure::class, CommandResponse::fromThrowable(new \Exception()));
 	}
 }

@@ -12,11 +12,11 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 	/**
 	 * Create a new Failure response from a Throwable.
 	 *
-	 * Use \Zumba\CQRS\Query\QueryResponse::fail() to create this response object.
+	 * Use \Zumba\CQRS\Query\QueryResponse::fromThrowable() to create this response object.
 	 *
-	 * @see \Zumba\CQRS\Query\QueryResponse::fail
+	 * @see \Zumba\CQRS\Query\QueryResponse::fromThrowable
 	 */
-	protected static function fromThrowable(\Throwable $error) : Failure {
+	protected static function make(\Throwable $error) : Failure {
 		$response = new static();
 		$response->error = $error;
 		return $response;

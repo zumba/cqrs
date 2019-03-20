@@ -12,7 +12,7 @@ use \Zumba\CQRS\Command\CommandResponse,
 class FailureTest extends \Zumba\Service\Test\TestCase {
 	public function testError() {
 		$e = new \Exception('test');
-		$response = CommandResponse::fail($e);
+		$response = CommandResponse::fromThrowable($e);
 		$this->assertSame($e, $response->getError());
 	}
 }

@@ -9,7 +9,7 @@ class CommandBus {
 	/**
 	 * A CQRS DTO Bus
 	 *
-	 * @var Zumba\CQRS\Bus
+	 * @var \Zumba\CQRS\Bus
 	 */
 	protected $bus;
 

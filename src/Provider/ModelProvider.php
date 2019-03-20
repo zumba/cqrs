@@ -4,6 +4,7 @@ namespace Zumba\CQRS\Provider;
 
 use \Zumba\CQRS\DTO,
 	\Zumba\CQRS\Handler,
+	\Zumba\CQRS\Response,
 	\Zumba\Primer\Base\Model;
 
 /**

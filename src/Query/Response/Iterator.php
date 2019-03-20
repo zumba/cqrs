@@ -47,7 +47,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 
 	public function __toString() : string {
 		if ($this->data->valid()) {
-			return json_encode($this->jsonSerialize());
+			return json_encode($this->jsonSerialize()) ?: '';
 		}
 		return "Invalid Iterator.";
 	}

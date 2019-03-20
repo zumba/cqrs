@@ -28,7 +28,7 @@ class Bus {
 	/**
 	 * Create a Bus with Providers
 	 */
-	public static function withProviders(Provider ...$providers) : Bus {
+	public static function fromProviders(Provider ...$providers) : Bus {
 		return new static(...$providers);
 	}
 

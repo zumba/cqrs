@@ -62,7 +62,7 @@ class BusTest extends \Zumba\Service\Test\TestCase {
 			->will($this->returnValue(null));
 
 
-		$bus = Bus::withProviders($providerNotFound, $providerNotFound, $provider);
+		$bus = Bus::fromProviders($providerNotFound, $providerNotFound, $provider);
 		$bus->attachMiddleware(new OkMiddleware());
 		$bus->dispatch($command);
 	}
@@ -81,7 +81,7 @@ class BusTest extends \Zumba\Service\Test\TestCase {
 			->expects($this->never())
 			->method('getHandler');
 
-		$bus = Bus::withProviders($provider);
+		$bus = Bus::fromProviders($provider);
 		$bus->attachMiddleware(new OkMiddleware(), new FailMiddleware());
 		$bus->dispatch($command);
 	}
@@ -101,7 +101,7 @@ class BusTest extends \Zumba\Service\Test\TestCase {
 			->with($dto)
 			->will($this->returnValue(null));
 
-		$bus = Bus::withProviders($provider);
+		$bus = Bus::fromProviders($provider);
 		$bus->delegate($dto);
 	}
 }

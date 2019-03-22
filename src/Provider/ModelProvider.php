@@ -60,9 +60,11 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 			$dependency = $parameter->getClass();
 			if ($dependency === null) {
 				static::fail($parameter);
+				return [];
 			}
 			if (!$dependency->isSubclassOf(Model::class)) {
 				static::fail($parameter);
+				return [];
 			}
 			$dependencies[] = $dependency->newInstance();
 		}
@@ -74,7 +76,10 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 	 *
 	 * @throws InvalidDependency
 	 */
-	protected static function fail(\ReflectionParameter $parameter) : Response {
+	protected static function fail(\ReflectionParameter $parameter) : void {
+		if (is_null($parameter->getClass())) {
+			throw new \Exception();
+		}
 		throw new InvalidDependency(sprintf(
 			"Don't be a night elf! `%s %s` is not a `%s`.",
 			$parameter->getClass()->getName(),

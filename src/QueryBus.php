@@ -17,15 +17,8 @@ class QueryBus {
 	/**
 	 * A Query Bus is a DTO bus wrapper.
 	 */
-	protected function __construct(Bus $bus) {
+	public function __construct(Bus $bus) {
 		$this->bus = $bus;
-	}
-
-	/**
-	 * Create a Query Bus
-	 */
-	public static function fromBus(Bus $bus) : QueryBus {
-		return new static($bus);
 	}
 
 	/**

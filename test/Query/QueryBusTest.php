@@ -22,7 +22,7 @@ class QueryBusTest extends \Zumba\Service\Test\TestCase {
 			->with($query)
 			->will($this->returnValue($response));
 
-		$bus = QueryBus::fromBus($dtoBus);
+		$bus = new QueryBus($dtoBus);
 		$this->assertSame($response, $bus->dispatch($query));
 	}
 
@@ -39,7 +39,7 @@ class QueryBusTest extends \Zumba\Service\Test\TestCase {
 			->with($query)
 			->will($this->returnValue($response));
 
-		$bus = QueryBus::fromBus($dtoBus);
+		$bus = new QueryBus($dtoBus);
 		$bus->dispatch($query);
 	}
 }

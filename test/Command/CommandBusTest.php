@@ -22,7 +22,7 @@ class CommandBusTest extends \Zumba\Service\Test\TestCase {
 			->with($command)
 			->will($this->returnValue($response));
 
-		$bus = CommandBus::fromBus($dtoBus);
+		$bus = new CommandBus($dtoBus);
 		$this->assertSame($response, $bus->dispatch($command));
 	}
 
@@ -39,7 +39,7 @@ class CommandBusTest extends \Zumba\Service\Test\TestCase {
 			->with($command)
 			->will($this->returnValue($response));
 
-		$bus = CommandBus::fromBus($dtoBus);
+		$bus = new CommandBus($dtoBus);
 		$bus->dispatch($command);
 	}
 }

@@ -17,15 +17,8 @@ class CommandBus {
 	/**
 	 * A Command Bus is a DTO bus wrapper.
 	 */
-	protected function __construct(Bus $bus) {
+	public function __construct(Bus $bus) {
 		$this->bus = $bus;
-	}
-
-	/**
-	 * Create a Command Bus
-	 */
-	public static function fromBus(Bus $bus) : CommandBus {
-		return new static($bus);
 	}
 
 	/**

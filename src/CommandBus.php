@@ -1,8 +1,9 @@
 <?php
 
-namespace Zumba\CQRS\Command;
+namespace Zumba\CQRS;
 
-use \Zumba\CQRS\Bus;
+use \Zumba\CQRS\Command\Command,
+	\Zumba\CQRS\Command\CommandResponse;
 
 class CommandBus {
 

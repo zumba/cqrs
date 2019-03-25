@@ -2,8 +2,8 @@
 
 namespace Zumba\Test\CQRS\Command;
 
-use \Zumba\CQRS\Command\Command,
-	\Zumba\CQRS\Command\CommandBus,
+use \Zumba\CQRS\CommandBus,
+	\Zumba\CQRS\Command\Command,
 	\Zumba\CQRS\Command\CommandResponse,
 	\Zumba\CQRS\Response;
 

@@ -2,8 +2,8 @@
 
 namespace Zumba\Test\CQRS\Query;
 
-use \Zumba\CQRS\Query\Query,
-	\Zumba\CQRS\Query\QueryBus,
+use \Zumba\CQRS\QueryBus,
+	\Zumba\CQRS\Query\Query,
 	\Zumba\CQRS\Query\QueryResponse,
 	\Zumba\CQRS\Response;
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace Zumba\CQRS\Query;
+namespace Zumba\CQRS;
 
-use \Zumba\CQRS\Bus;
+use \Zumba\CQRS\Query\Query,
+	\Zumba\CQRS\Query\QueryResponse;
 
 class QueryBus {
 

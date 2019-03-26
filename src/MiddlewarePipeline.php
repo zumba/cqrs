@@ -72,7 +72,7 @@ class MiddlewarePipeline {
 		if (is_callable($final)) {
 			return $final($dto);
 		}
-		return null;
+		return new NullResponse();
 	}
 
 	/**

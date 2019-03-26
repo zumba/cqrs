@@ -3,13 +3,13 @@
 namespace Zumba\Test\CQRS\Provider;
 
 use \Zumba\CQRS\Provider\ModelProvider,
-	\Zumba\CQRS\DTO,
-	\Zumba\CQRS\Response;
+	\Zumba\CQRS\Command\Command,
+	\Zumba\CQRS\Command\CommandResponse;
 
-class Bar extends DTO {}
-class BarHandler implements \Zumba\CQRS\Handler {
+class Bar extends Command {}
+class BarHandler implements \Zumba\CQRS\Command\Handler {
 	public function __construct(Foo $notModel) {}
-	public function handle(DTO $dto) : Response {}
+	public function handle(Command $command) : CommandResponse {}
 }
 
 /**
@@ -23,6 +23,6 @@ class ModelProviderTest extends \Zumba\Service\Test\TestCase {
 	public function testGetHandler() {
 		$provider = new ModelProvider();
 		$dto = new Bar();
-		$provider->getHandler($dto);
+		$provider->getCommandHandler($dto);
 	}
 }

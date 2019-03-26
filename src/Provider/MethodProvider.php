@@ -3,8 +3,15 @@
 namespace Zumba\CQRS\Provider;
 
 use \Zumba\CQRS\DTO,
-	\Zumba\CQRS\Handler,
-	\Zumba\CQRS\HandlerFactory;
+	\Zumba\CQRS\Command\Handler,
+	\Zumba\CQRS\HandlerNotFound,
+	\Zumba\CQRS\InvalidHandler,
+	\Zumba\CQRS\Query\Query,
+	\Zumba\CQRS\Command\Command,
+	\Zumba\CQRS\Query\Handler as QueryHandler,
+	\Zumba\CQRS\Query\HandlerFactory as QueryHandlerFactory,
+	\Zumba\CQRS\Command\HandlerFactory as CommandHandlerFactory,
+	\Zumba\CQRS\Command\Handler as CommandHandler;
 
 /**
  * MethodProvider attempts to use a factory method on the handler itself.
@@ -12,13 +19,34 @@ use \Zumba\CQRS\DTO,
 class MethodProvider implements \Zumba\CQRS\Provider {
 
 	/**
-	 * Locate the dto handler and if it implements HandlerFactory, make it.
+	 * Extract the handler name from the DTO and return it.
+	 *
+	 * @throws HandlerNotFound if the class does not exist.
 	 */
-	public function getHandler(DTO $dto) : ? Handler {
+	protected static function getHandlerName(DTO $dto, string $factoryInterface) : string {
 		$factory = get_class($dto) . "Handler";
-		if (!class_exists($factory) || !in_array(HandlerFactory::class, class_implements($factory))) {
-			return null;
+		if (!class_exists($factory)) {
+			throw new HandlerNotFound();
 		}
+		if (!in_array($factoryInterface, class_implements($factory))) {
+			throw new HandlerNotFound();
+		}
+		return $factory;
+	}
+
+	/**
+	 * Locate the command handler factory and make the handler
+	 */
+	public function getCommandHandler(Command $command) : CommandHandler {
+		$factory = static::getHandlerName($command, CommandHandlerFactory::class);
+		return $factory::make();
+	}
+
+	/**
+	 * Locate the Query handler factory and make the handler
+	 */
+	public function getQueryHandler(Query $query) : QueryHandler {
+		$factory = static::getHandlerName($query, QueryHandlerFactory::class);
 		return $factory::make();
 	}
 }

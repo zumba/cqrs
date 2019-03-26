@@ -3,10 +3,15 @@
 namespace Zumba\CQRS\Provider;
 
 use \Zumba\CQRS\DTO,
-	\Zumba\CQRS\Handler,
 	\Zumba\CQRS\Response,
+	\Zumba\CQRS\HandlerNotFound,
+	\Zumba\CQRS\InvalidHandler,
 	\Zumba\Primer\Base\Model,
-	\Zumba\Util\Log;
+	\Zumba\Util\Log,
+	\Zumba\CQRS\Query\Query,
+	\Zumba\CQRS\Command\Command,
+	\Zumba\CQRS\Query\Handler as QueryHandler,
+	\Zumba\CQRS\Command\Handler as CommandHandler;
 
 /**
  * ModelProvider attempts to build the handler by injecting models into the constructor.
@@ -14,26 +19,38 @@ use \Zumba\CQRS\DTO,
 class ModelProvider implements \Zumba\CQRS\Provider {
 
 	/**
-	 * Build a dto handler by attempting to inject models.
+	 * Extract the factory name from the DTO and return it.
+	 *
+	 * @throws HandlerNotFound if the class does not exist.
+	 * @throws InvalidHandler if a handler factory class does not implement the correct interface.
 	 */
-	public function getHandler(DTO $dto) : ? Handler {
-		try {
-			$handler = get_class($dto) . "Handler";
-			$dependencies = static::extract($handler);
-			if (empty($dependencies)) {
-				return null;
-			}
-			return new $handler(...$dependencies);
-		} catch (\LogicException $e) {
-			// if there was a logic exception, then the developer did something wrong so we should
-			// bubble it so they get a nice error message.
-			throw $e;
-		} catch (\Throwable $e) {
-			// Any other problem should just return null.  This way some other provider might
-			// be able to build the handler.
-			Log::write(sprintf("%s could not resolve handler for %s", __CLASS__, get_class($dto)), Log::LEVEL_INFO, 'cqrs');
-			return null;
+	protected static function getHandlerName(DTO $dto, string $handlerInterface) : string {
+		$handler = get_class($dto) . "Handler";
+		if (!class_exists($handler)) {
+			throw new HandlerNotFound();
 		}
+		if (!in_array($handlerInterface, class_implements($handler))) {
+			throw new InvalidHandler("$handler exists, but it does not implement $handlerInterface");
+		}
+		return $handler;
+	}
+
+	/**
+	 * Locate the command handler factory and make the handler
+	 */
+	public function getCommandHandler(Command $command) : CommandHandler {
+		$handler = static::getHandlerName($command, CommandHandler::class);
+		$dependencies = static::extract($handler);
+		return new $handler(...$dependencies);
+	}
+
+	/**
+	 * Locate the Query handler factory and make the handler
+	 */
+	public function getQueryHandler(Query $query) : QueryHandler {
+		$handler = static::getHandlerName($query, QueryHandler::class);
+		$dependencies = static::extract($handler);
+		return new $handler(...$dependencies);
 	}
 
 	/**
@@ -43,9 +60,6 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 	 * @return array of zumba models
 	 */
 	protected static function extract(string $className) : array {
-		if (!class_exists($className)) {
-			throw new InvalidDependency("Undefined class: $className");
-		}
 		$image = new \ReflectionClass($className);
 		$constructor = $image->getConstructor();
 		if ($constructor === null) {
@@ -78,7 +92,9 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 	 */
 	protected static function fail(\ReflectionParameter $parameter) : void {
 		if (is_null($parameter->getClass())) {
-			throw new \Exception();
+			throw new InvalidDependency(sprintf(
+				"Don't be a night elf! `%s` is not a `%s`.", $parameter->getName(), Model::class
+			));
 		}
 		throw new InvalidDependency(sprintf(
 			"Don't be a night elf! `%s %s` is not a `%s`.",

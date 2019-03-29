@@ -65,7 +65,6 @@ class QueryBus {
 	 * @throws InvalidHandler if a handler cannot be found.
 	 */
 	protected function delegate(Query $query) : QueryResponse {
-		$handler = null;
 		foreach ($this->providers as $provider) {
 			try {
 				return $provider->getQueryHandler($query)->handle($query);

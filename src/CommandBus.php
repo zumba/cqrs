@@ -65,7 +65,6 @@ class CommandBus {
 	 * @throws InvalidHandler if a handler cannot be found.
 	 */
 	protected function delegate(Command $command) : CommandResponse {
-		$handler = null;
 		foreach ($this->providers as $provider) {
 			try {
 				return $provider->getCommandHandler($command)->handle($command);

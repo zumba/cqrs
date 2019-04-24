@@ -17,4 +17,11 @@ abstract class DTO {
 		}
 		return $this->$name;
 	}
+
+	/**
+	 * Implement __isset so that checks for empty() work as expected.
+	 */
+	final public function __isset(string $name) : bool {
+		return !!property_exists($this, $name);
+	}
 }

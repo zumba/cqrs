@@ -39,7 +39,7 @@ abstract class CommandListener extends Listener {
 			throw new NotFoundException('Command class not found for given event type.');
 		}
 		$commandClass = $commandMap[$event->type];
-		if (!in_array(WithProperties::class, class_implements($commandClass))) {
+		if (!is_subclass_of($commandClass, WithProperties::class)) {
 			throw new \RuntimeException('Command must support WithProperties interface.');
 		}
 		return $commandClass::fromArray($event->data());

@@ -10,6 +10,7 @@ use \Zumba\CQRS\Command\WithProperties;
 use \Zumba\CQRS\Command\HandlerFactory;
 use \Zumba\CQRS\Command\Handler;
 use \Zumba\CQRS\Command\CommandResponse;
+use \Zumba\CQRS\CommandBus;
 
 class MockListener extends CommandListener {
 	protected $listenerSlug = 'mock-listener';
@@ -23,8 +24,11 @@ class MockListener extends CommandListener {
 }
 
 class CorrectlyImplementedCommand extends Command implements WithProperties {
+	protected $progress = [];
 	public static function fromArray(array $props) : Command {
-		return new static();
+		$command = new static();
+		$command->progress = $props['progress'];
+		return $command;
 	}
 }
 
@@ -96,5 +100,30 @@ class CommandListenerTest extends ListenerTestCase {
 		$this->runEvent($listener, $event);
 		$this->assertEquals(Event::STATUS_FAILED, $event->status());
 		$this->assertEquals("Command must support WithProperties interface.", $event->statusMessage());
+	}
+
+	public function testPassingProgressToCommandProps() {
+		$listener = $this->getMockBuilder(MockListener::class)
+			->setMethods(['commandBus'])
+			->getMock();
+		$bus = $this->getMockBuilder(CommandBus::class)
+			->disableOriginalConstructor()
+			->setMethods(['dispatch'])
+			->getMock();
+		$listener->expects($this->once())->method('commandBus')
+			->will($this->returnValue($bus));
+		$bus->expects($this->once())->method('dispatch')
+			->with($this->callback(function(CorrectlyImplementedCommand $command) {
+				$this->assertEquals(['some' => 'progress'], $command->progress);
+				return true;
+			}))
+			->will($this->returnValue(CommandResponse::fromSuccess()));
+		$event = new Event([
+			'type' => 'type-a',
+			'data' => json_encode(['foo' => 'bar']),
+			'progress' => json_encode(['some' => 'progress'])
+		]);
+		$this->runEvent($listener, $event);
+		$this->assertEquals(Event::STATUS_DONE, $event->status());
 	}
 }

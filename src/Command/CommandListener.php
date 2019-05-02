@@ -42,7 +42,7 @@ abstract class CommandListener extends Listener {
 		if (!is_subclass_of($commandClass, WithProperties::class)) {
 			throw new \RuntimeException('Command must support WithProperties interface.');
 		}
-		return $commandClass::fromArray($event->data());
+		return $commandClass::fromArray($event->data() + ['progress' => $event->progress()]);
 	}
 
 	/**
@@ -69,6 +69,7 @@ abstract class CommandListener extends Listener {
 			$command = $this->commandFromEvent($event);
 			$response = $this->commandBus()->dispatch($command);
 			if ($response instanceof Failure) {
+				$event->progress($response->getMeta());
 				throw $response->getError();
 			}
 			$event->done();

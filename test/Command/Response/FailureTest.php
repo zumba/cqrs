@@ -15,4 +15,9 @@ class FailureTest extends \Zumba\Service\Test\TestCase {
 		$response = CommandResponse::fromThrowable($e);
 		$this->assertSame($e, $response->getError());
 	}
+
+	public function testMeta() {
+		$response = CommandResponse::fromThrowable(new \Exception('test'))->withMeta(['foo' => 'bar']);
+		$this->assertEquals(['foo' => 'bar'], $response->getMeta());
+	}
 }

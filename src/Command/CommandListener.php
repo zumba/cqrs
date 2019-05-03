@@ -8,7 +8,7 @@ use \Zumba\CQRS\CommandBus;
 use \Zumba\CQRS\MiddlewarePipeline;
 use \Zumba\CQRS\Command\Response\Failure;
 use \Zumba\CQRS\Middleware\Logger;
-use \Zumba\CQRS\Command\WithProperties;
+use \Zumba\CQRS\Command\WithEvent;
 use \Zumba\CQRS\Provider\ClassProvider;
 use \Zumba\CQRS\Provider\MethodProvider;
 use \Zumba\CQRS\Provider\ModelProvider;
@@ -39,10 +39,10 @@ abstract class CommandListener extends Listener {
 			throw new NotFoundException('Command class not found for given event type.');
 		}
 		$commandClass = $commandMap[$event->type];
-		if (!is_subclass_of($commandClass, WithProperties::class)) {
-			throw new \RuntimeException('Command must support WithProperties interface.');
+		if (!is_subclass_of($commandClass, WithEvent::class)) {
+			throw new \RuntimeException('Command must support WithEvent interface.');
 		}
-		return $commandClass::fromArray($event->data() + ['progress' => $event->progress()]);
+		return $commandClass::fromEvent($event);
 	}
 
 	/**

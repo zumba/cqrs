@@ -6,7 +6,7 @@ use \Zumba\Primer\Test\ListenerTestCase;
 use \Zumba\Primer\Model\EventQueue\Event;
 use \Zumba\CQRS\Command\CommandListener;
 use \Zumba\CQRS\Command\Command;
-use \Zumba\CQRS\Command\WithProperties;
+use \Zumba\CQRS\Command\WithEvent;
 use \Zumba\CQRS\Command\HandlerFactory;
 use \Zumba\CQRS\Command\Handler;
 use \Zumba\CQRS\Command\CommandResponse;
@@ -23,11 +23,11 @@ class MockListener extends CommandListener {
 	}
 }
 
-class CorrectlyImplementedCommand extends Command implements WithProperties {
+class CorrectlyImplementedCommand extends Command implements WithEvent {
 	protected $progress = [];
-	public static function fromArray(array $props) : Command {
+	public static function fromEvent(Event $event) : Command {
 		$command = new static();
-		$command->progress = $props['progress'];
+		$command->progress = $event->progress();
 		return $command;
 	}
 }
@@ -99,7 +99,7 @@ class CommandListenerTest extends ListenerTestCase {
 		]);
 		$this->runEvent($listener, $event);
 		$this->assertEquals(Event::STATUS_FAILED, $event->status());
-		$this->assertEquals("Command must support WithProperties interface.", $event->statusMessage());
+		$this->assertEquals("Command must support WithEvent interface.", $event->statusMessage());
 	}
 
 	public function testPassingProgressToCommandProps() {

@@ -24,6 +24,8 @@ abstract class CommandListener extends Listener {
 
 	/**
 	 * Provides a key-value array with the key being event type and value being command classname.
+	 *
+	 * @return mixed[]
 	 */
 	abstract protected function commandEventClassMap() : array;
 
@@ -49,7 +51,7 @@ abstract class CommandListener extends Listener {
 	 * Setup and get the command bus.
 	 */
 	protected function commandBus() : CommandBus {
-		if (!$this->commandBus) {
+		if (empty($this->commandBus)) {
 			$bus = CommandBus::fromProviders(
 				new ClassProvider(),
 				new MethodProvider(),
@@ -63,6 +65,8 @@ abstract class CommandListener extends Listener {
 
 	/**
 	 * Loop thru the events
+	 *
+	 * @param \Zumba\Primer\Model\EventQueue\Event $event
 	 */
 	protected function executeLoop($event) : void {
 		try {
@@ -76,7 +80,7 @@ abstract class CommandListener extends Listener {
 		} catch (NotFoundException $e) {
 			$event->notSupportedByListener();
 			return;
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			$event->fail($e);
 		}
 	}

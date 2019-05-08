@@ -2,6 +2,9 @@
 
 namespace Zumba\CQRS\Command;
 
+use \Zumba\CQRS\Command\Response\Success;
+use \Zumba\CQRS\Command\Response\Failure;
+
 abstract class CommandResponse implements \Zumba\CQRS\Response {
 
 	/**
@@ -13,7 +16,7 @@ abstract class CommandResponse implements \Zumba\CQRS\Response {
 	/**
 	 * Create a Success Response.
 	 */
-	public static function fromSuccess() : CommandResponse {
+	public static function fromSuccess() : Success {
 		return Response\Success::make();
 	}
 
@@ -22,7 +25,7 @@ abstract class CommandResponse implements \Zumba\CQRS\Response {
 	 *
 	 * @see \Zumba\CQRS\Response
 	 */
-	public static function fromThrowable(\Throwable $e) : CommandResponse {
+	public static function fromThrowable(\Throwable $e) : Failure {
 		return Response\Failure::make($e);
 	}
 }

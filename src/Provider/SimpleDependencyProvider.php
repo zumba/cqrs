@@ -76,12 +76,11 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider {
 				static::fail($parameter);
 				return [];
 			}
-			$dependencyImage = new \ReflectionClass($dependency->getName());
-			if (!$dependencyImage->isInstantiable()) {
+			if (!$dependency->isInstantiable()) {
 				static::fail($parameter);
 				return [];
 			}
-			$dependencyConstructor = $dependencyImage->getConstructor();
+			$dependencyConstructor = $dependency->getConstructor();
 			if (!is_null($dependencyConstructor) && !static::areAllParamsOptional($dependencyConstructor)) {
 				static::fail($parameter);
 				return [];
@@ -115,7 +114,7 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider {
 				"Don't be a night elf! `%s` is not a valid class.", $parameter->getName()
 			));
 		}
-		if (!(new \ReflectionClass($parameter->getClass()->getName()))->isInstantiable()) {
+		if (!$parameter->getClass()->isInstantiable()) {
 			throw new InvalidDependency(sprintf(
 				"Don't be a night elf! `%s %s` cannot be instantiated.",
 				$parameter->getClass()->getName(),

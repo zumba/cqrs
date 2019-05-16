@@ -123,7 +123,7 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider {
 			));
 		}
 		throw new InvalidDependency(sprintf(
-			"Don't be a night elf2 `%s %s` has required params.",
+			"Don't be a night elf! `%s %s` has required params.",
 			$parameter->getClass()->getName(),
 			"$" . $parameter->getName()
 		));

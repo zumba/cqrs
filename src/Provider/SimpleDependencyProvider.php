@@ -14,9 +14,9 @@ use \Zumba\CQRS\DTO,
 	\Zumba\CQRS\Command\Handler as CommandHandler;
 
 /**
- * ModelProvider attempts to build the handler by injecting models into the constructor.
+ * SimpleDependencyProvider attempts to build the handler by injecting instances into the constructor.
  */
-class ModelProvider implements \Zumba\CQRS\Provider {
+class SimpleDependencyProvider implements \Zumba\CQRS\Provider {
 
 	/**
 	 * Extract the factory name from the DTO and return it.
@@ -76,13 +76,32 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 				static::fail($parameter);
 				return [];
 			}
-			if (!$dependency->isSubclassOf(Model::class)) {
+			$dependencyImage = new \ReflectionClass($dependency->getName());
+			if (!$dependencyImage->isInstantiable()) {
+				static::fail($parameter);
+				return [];
+			}
+			$dependencyConstructor = $dependencyImage->getConstructor();
+			if (!is_null($dependencyConstructor) && !static::areAllParamsOptional($dependencyConstructor)) {
 				static::fail($parameter);
 				return [];
 			}
 			$dependencies[] = $dependency->newInstance();
 		}
 		return $dependencies;
+	}
+
+	/**
+	 * Check if all parameters in a method are optional.
+	 */
+	protected static function areAllParamsOptional(\ReflectionMethod $method) : bool {
+		$params = $method->getParameters();
+		foreach ($params as $param) {
+			if (!$param->isDefaultValueAvailable()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -93,14 +112,20 @@ class ModelProvider implements \Zumba\CQRS\Provider {
 	protected static function fail(\ReflectionParameter $parameter) : void {
 		if (is_null($parameter->getClass())) {
 			throw new InvalidDependency(sprintf(
-				"Don't be a night elf! `%s` is not a `%s`.", $parameter->getName(), Model::class
+				"Don't be a night elf! `%s` is not a valid class.", $parameter->getName()
+			));
+		}
+		if (!(new \ReflectionClass($parameter->getClass()->getName()))->isInstantiable()) {
+			throw new InvalidDependency(sprintf(
+				"Don't be a night elf! `%s %s` cannot be instantiated.",
+				$parameter->getClass()->getName(),
+				"$" . $parameter->getName()
 			));
 		}
 		throw new InvalidDependency(sprintf(
-			"Don't be a night elf! `%s %s` is not a `%s`.",
+			"Don't be a night elf2 `%s %s` has required params.",
 			$parameter->getClass()->getName(),
-			"$" . $parameter->getName(),
-			Model::class
+			"$" . $parameter->getName()
 		));
 	}
 }

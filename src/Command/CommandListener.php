@@ -11,7 +11,7 @@ use \Zumba\CQRS\Middleware\Logger;
 use \Zumba\CQRS\Command\WithEvent;
 use \Zumba\CQRS\Provider\ClassProvider;
 use \Zumba\CQRS\Provider\MethodProvider;
-use \Zumba\CQRS\Provider\ModelProvider;
+use \Zumba\CQRS\Provider\SimpleDependencyProvider;
 use \Zumba\Primer\Exception\NotFoundException;
 use \Zumba\Util\Log;
 
@@ -55,7 +55,7 @@ abstract class CommandListener extends Listener {
 			$bus = CommandBus::fromProviders(
 				new ClassProvider(),
 				new MethodProvider(),
-				new ModelProvider()
+				new SimpleDependencyProvider()
 			);
 			$pipeline = MiddlewarePipeline::fromMiddleware(Logger::fromLevel(Log::LEVEL_INFO));
 			$this->commandBus = $bus->withMiddleware($pipeline);

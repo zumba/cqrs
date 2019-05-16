@@ -4,7 +4,7 @@ namespace Zumba\CQRS;
 
 use \Zumba\CQRS\Provider\ClassProvider;
 use \Zumba\CQRS\Provider\MethodProvider;
-use \Zumba\CQRS\Provider\ModelProvider;
+use \Zumba\CQRS\Provider\SimpleDependencyProvider;
 use \Zumba\CQRS\Middleware\Logger;
 use \Zumba\Util\Log;
 
@@ -14,7 +14,7 @@ trait QueryBusTrait {
 		$bus = QueryBus::fromProviders(
 			new ClassProvider(),
 			new MethodProvider(),
-			new ModelProvider()
+			new SimpleDependencyProvider()
 		);
 		$pipeline = MiddlewarePipeline::fromMiddleware(Logger::fromLevel(Log::LEVEL_INFO));
 		return $bus->withMiddleware($pipeline);

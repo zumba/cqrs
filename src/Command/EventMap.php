@@ -66,7 +66,7 @@ class EventMap {
 	public function mapToBus(CommandBus $bus) : array {
 		$list = [];
 		foreach ($this->map as $event => $commands) {
-			$list[$event] = $this->getListener($bus, $commands);
+			$list[$event] = $this->listener($bus, $commands);
 		}
 		return $list;
 	}
@@ -76,7 +76,7 @@ class EventMap {
 	 *
 	 * @return callable
 	 */
-	protected function getListener(CommandBus $bus, array $commands) : callable {
+	protected function listener(CommandBus $bus, array $commands) : callable {
 		return function(object $event) use ($bus, $commands) : void {
 			foreach ($commands as $command => $map) {
 				if (in_array(WithProperties::class, class_implements($command))) {

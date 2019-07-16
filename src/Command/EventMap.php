@@ -43,8 +43,11 @@ class EventMap {
 				throw new InvalidEventMap("Malformed event list.  Keys must be in the format 'event.name'.");
 			}
 			foreach ($commands as $command => $map) {
-				if (!class_exists($command) || !is_a($command, Command::class)) {
-					throw new InvalidEventMap("Malformed event map.  Command keys must be a command class name.");
+				if (!class_exists($command)) {
+					throw new InvalidEventMap("Malformed event map.  `$command` does not exist.");
+				}
+				if (!is_subclass_of($command, Command::class)) {
+					throw new InvalidEventMap("Malformed event map.  `$command` is not a Command class.");
 				}
 				if (!is_array($map)) {
 					throw new InvalidEventMap("Malformed event map.  Value of Command keys must be an array.");
@@ -88,11 +91,20 @@ class EventMap {
 
 	/**
 	 * Transform an event object to an array of props suitable for a command with properties.
+	 *
+	 * @return array
 	 */
 	protected function transform(object $event, array $map) : array {
+		if ($event instanceof \Zumba\Symbiosis\Framework\EventInterface) {
+			$props = [];
+			foreach ($map as $commandKey => $eventKey) {
+				$props[$commandKey] = (string)$event->data()[$eventKey] ?? '';
+			}
+			return $props;
+		}
 		$props = [];
 		foreach ($map as $commandKey => $eventKey) {
-			$props[$commandKey] = $event->$eventKey;
+			$props[$commandKey] = (string)$event->$eventKey;
 		}
 		return $props;
 	}

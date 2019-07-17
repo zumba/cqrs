@@ -7,5 +7,5 @@ interface EventMapper {
 	/**
 	 * Describe the events mapped to commands
 	 */
-	public static function eventMap() : EventMap;
+	public function eventMap() : EventMap;
 }

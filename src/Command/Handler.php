@@ -2,10 +2,12 @@
 
 namespace Zumba\CQRS\Command;
 
+use \Zumba\CQRS\CommandService;
+
 interface Handler {
 
 	/**
 	 * Handle a Command
 	 */
-	public function handle(Command $command) : CommandResponse;
+	public function handle(Command $command, CommandService $commandService) : CommandResponse;
 }

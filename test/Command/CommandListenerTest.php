@@ -10,6 +10,7 @@ use \Zumba\CQRS\Command\WithEvent;
 use \Zumba\CQRS\Command\HandlerFactory;
 use \Zumba\CQRS\Command\Handler;
 use \Zumba\CQRS\Command\CommandResponse;
+use \Zumba\CQRS\CommandService;
 use \Zumba\CQRS\CommandBus;
 
 class MockListener extends CommandListener {
@@ -37,7 +38,7 @@ class CorrectlyImplementedCommandHandler implements Handler, HandlerFactory {
 		return new static();
 	}
 
-	public function handle(Command $command) : CommandResponse {
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {
 		return CommandResponse::fromSuccess();
 	}
 }
@@ -50,7 +51,7 @@ class MissingWithPropertiesCommandHandler implements Handler, HandlerFactory {
 		return new static();
 	}
 
-	public function handle(Command $command) : CommandResponse {
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {
 		return CommandResponse::fromSuccess();
 	}
 }

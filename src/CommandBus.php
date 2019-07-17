@@ -5,6 +5,7 @@ namespace Zumba\CQRS;
 use \Zumba\CQRS\Command\Command;
 use \Zumba\CQRS\Command\CommandResponse;
 use \Zumba\CQRS\Command\Handler;
+use \Zumba\CQRS\Command\EventMapperProvider;
 use \Zumba\Util\Log;
 use \Zumba\CQRS\Command\WithEventDispatcher;
 use \Zumba\CQRS\Command\EventMapper;
@@ -71,37 +72,20 @@ class CommandBus {
 	protected function delegate(Command $command) : CommandResponse {
 		foreach ($this->providers as $provider) {
 			try {
+				$dispatcher = new EventRegistry();
 				$handler = $provider->getCommandHandler($command);
 				$interfaces = class_implements($handler);
-				if (in_array(WithEventDispatcher::class, $interfaces)) {
-					$handler = $this->addEventDispatcherToHandler($command, $handler);
+				if (in_array(EventMapperProvider::class, $interfaces)) {
+					$listeners = $handler->eventMapper()->eventMap()->mapToBus($this);
+					foreach ($listeners as $event => $listener) {
+						$dispatcher->register($event, $listener);
+					}
 				}
-				return $handler->handle($command);
+				return $handler->handle($command, \Zumba\CQRS\Command\CommandService::make($dispatcher, $this));
 			} catch (HandlerNotFound $e) {
 				Log::write(sprintf("Handler not found by %s", get_class($provider)), Log::LEVEL_INFO, "cqrs");
 			}
 		}
 		throw new InvalidHandler("Could not find a handler for " . get_class($command));
-	}
-
-	/**
-	 * Attempt to add an event dispatcher to the handler.
-	 */
-	protected function addEventDispatcherToHandler(Command $command, WithEventDispatcher $handler) : WithEventDispatcher {
-		$mapperName = get_class($command) . "EventMapper";
-		if (!class_exists($mapperName)) {
-			Log::write(sprintf("`%s` implements WithEventDispatcher but no `$mapperName` class was defined.", get_class($handler)), Log::LEVEL_WARNING, "cqrs");
-			return $handler;
-		}
-		$interfaces = class_implements($mapperName);
-		if (!in_array(EventMapper::class, $interfaces)) {
-			Log::write(sprintf("`$mapperName` does not implement %s", EventMapper::class), Log::LEVEL_WARNING, "cqrs");
-			return $handler;
-		}
-		$dispatcher = new EventRegistry();
-		foreach ($mapperName::eventMap()->mapToBus($this) as $event => $listener) {
-			$dispatcher->register($event, $listener);
-		}
-		return $handler->withEventDispatcher($dispatcher);
 	}
 }

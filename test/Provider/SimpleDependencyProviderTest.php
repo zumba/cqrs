@@ -5,6 +5,7 @@ namespace Zumba\Test\CQRS\Provider;
 use \Zumba\CQRS\Provider\SimpleDependencyProvider,
 	\Zumba\CQRS\Command\Command,
 	\Zumba\CQRS\Command\CommandResponse;
+use \Zumba\CQRS\CommandService;
 
 class NonOptionalParamConstructor {
 	public function __construct($a, $b = 's') {}
@@ -12,7 +13,7 @@ class NonOptionalParamConstructor {
 class NonOptionalCommand extends Command {}
 class NonOptionalCommandHandler implements \Zumba\CQRS\Command\Handler {
 	public function __construct(NonOptionalParamConstructor $notSimple) {}
-	public function handle(Command $command) : CommandResponse {}
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {}
 }
 
 class PrivateConstructor {
@@ -25,13 +26,13 @@ class PrivateConstructor {
 class PrivateConstructorCommand extends Command {}
 class PrivateConstructorCommandHandler implements \Zumba\CQRS\Command\Handler {
 	public function __construct(PrivateConstructor $notSimple) {}
-	public function handle(Command $command) : CommandResponse {}
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {}
 }
 
 class NotValidCommand extends Command {}
 class NotValidCommandHandler implements \Zumba\CQRS\Command\Handler {
 	public function __construct(string $notValid) {}
-	public function handle(Command $command) : CommandResponse {}
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {}
 }
 
 class EmptyContructor {
@@ -40,7 +41,7 @@ class EmptyContructor {
 class EmptyContructorCommand extends Command {}
 class EmptyContructorCommandHandler implements \Zumba\CQRS\Command\Handler {
 	public function __construct(EmptyContructor $simpleDependency) {}
-	public function handle(Command $command) : CommandResponse {}
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {}
 }
 
 class OptionalParamConstructor {
@@ -49,7 +50,7 @@ class OptionalParamConstructor {
 class OptionalParamConstructorCommand extends Command {}
 class OptionalParamConstructorCommandHandler implements \Zumba\CQRS\Command\Handler {
 	public function __construct(OptionalParamConstructor $simpleDependency) {}
-	public function handle(Command $command) : CommandResponse {}
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {}
 }
 
 /**

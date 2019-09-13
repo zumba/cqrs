@@ -39,4 +39,13 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 		$error = $this->error->getMessage();
 		return compact('error');
 	}
+
+	/**
+	 * Failure instance with additional meta data.
+	 */
+	public function withMeta(array $meta) : \Zumba\CQRS\Query\Response\Failure {
+		$failure = clone $this;
+		$failure->meta = $meta;
+		return $failure;
+	}
 }

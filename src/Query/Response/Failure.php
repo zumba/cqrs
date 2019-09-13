@@ -10,6 +10,11 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 	protected $error;
 
 	/**
+	 * @var array
+	 */
+	protected $meta = [];
+
+	/**
 	 * Create a new Failure response from a Throwable.
 	 *
 	 * Use \Zumba\CQRS\Query\QueryResponse::fromThrowable() to create this response object.
@@ -38,6 +43,13 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 	public function jsonSerialize() {
 		$error = $this->error->getMessage();
 		return compact('error');
+	}
+
+	/**
+	 * Get meta data associated to the failure.
+	 */
+	public function getMeta() : array {
+		return $this->meta;
 	}
 
 	/**

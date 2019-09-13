@@ -20,7 +20,7 @@ abstract class QueryResponse implements Response {
 	 *
 	 * @see \Zumba\CQRS\Response
 	 */
-	public static function fromThrowable(\Throwable $e) : QueryResponse {
+	public static function fromThrowable(\Throwable $e) : Failure {
 		return \Zumba\CQRS\Query\Response\Failure::make($e);
 	}
 

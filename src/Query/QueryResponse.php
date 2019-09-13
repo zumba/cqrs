@@ -5,7 +5,8 @@ namespace Zumba\CQRS\Query;
 use \Zumba\CQRS\Response,
 	\Zumba\CQRS\Query\Response\Scalar,
 	\Zumba\CQRS\Query\Response\Map,
-	\Zumba\CQRS\Query\Response\Iterator;
+	\Zumba\CQRS\Query\Response\Iterator,
+	\Zumba\CQRS\Query\Response\Failure;
 
 abstract class QueryResponse implements Response {
 
@@ -21,7 +22,7 @@ abstract class QueryResponse implements Response {
 	 * @see \Zumba\CQRS\Response
 	 */
 	public static function fromThrowable(\Throwable $e) : Failure {
-		return \Zumba\CQRS\Query\Response\Failure::make($e);
+		return Failure::make($e);
 	}
 
 	/**

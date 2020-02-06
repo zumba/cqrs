@@ -5,6 +5,9 @@ namespace Zumba\CQRS;
 use \Zumba\CQRS\Command\Command;
 use \Zumba\CQRS\Command\CommandResponse;
 use \Zumba\CQRS\Command\EventMapperProvider;
+use Zumba\CQRS\Provider\ClassProvider;
+use Zumba\CQRS\Provider\MethodProvider;
+use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use \Zumba\Util\Log;
 use \Zumba\Symbiosis\Event\EventRegistry;
 
@@ -48,6 +51,19 @@ class CommandBus {
 			return $bus->delegate($command);
 		});
 		return $bus;
+	}
+
+	/**
+	 * Default configured command bus.
+	 *
+	 * @return CommandBus
+	 */
+	public static function defaultBus() : CommandBus {
+		return static::fromProviders(
+			new ClassProvider(),
+			new MethodProvider(),
+			new SimpleDependencyProvider()
+		);
 	}
 
 	/**

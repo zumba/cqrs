@@ -4,11 +4,8 @@ namespace Zumba\CQRS;
 
 use \Zumba\CQRS\Command\Command;
 use \Zumba\CQRS\Command\CommandResponse;
-use \Zumba\CQRS\Command\Handler;
 use \Zumba\CQRS\Command\EventMapperProvider;
 use \Zumba\Util\Log;
-use \Zumba\CQRS\Command\WithEventDispatcher;
-use \Zumba\CQRS\Command\EventMapper;
 use \Zumba\Symbiosis\Event\EventRegistry;
 
 class CommandBus {

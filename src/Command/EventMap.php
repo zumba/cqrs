@@ -98,15 +98,30 @@ class EventMap {
 		if ($event instanceof \Zumba\Symbiosis\Framework\EventInterface) {
 			$props = [];
 			foreach ($map as $commandKey => $eventKey) {
-				$props[$commandKey] = (string)$event->data()[$eventKey] ?? '';
+				$props[$commandKey] = $this->transformValue($event->data()[$eventKey] ?? '');
 			}
 			return $props;
 		}
 		$props = [];
 		foreach ($map as $commandKey => $eventKey) {
-			$props[$commandKey] = (string)$event->$eventKey;
+			$props[$commandKey] = $this->transformValue($event->$eventKey);
 		}
 		return $props;
+	}
+
+	/**
+	 * Recursively transform a value to a scalar or array of scalars.
+	 *
+	 * @param mixed $value
+	 * @return string|boolean|integer|float|array
+	 */
+	protected function transformValue($value) {
+		if (is_array($value)) {
+			return array_map(function($subValue) {
+				return is_scalar($subValue) ? $subValue : (string)$subValue;
+			}, $value);
+		}
+		return is_scalar($value) ? $value : (string)$value;
 	}
 
 	/**

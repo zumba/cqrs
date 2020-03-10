@@ -110,7 +110,7 @@ class EventMap {
 	}
 
 	/**
-	 * Recursively transform a value to a scalar or array of scalars.
+	 * Transform a value to a scalar or array of scalars.
 	 *
 	 * @param mixed $value
 	 * @return string|boolean|integer|float|array

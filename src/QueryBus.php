@@ -2,6 +2,9 @@
 
 namespace Zumba\CQRS;
 
+use Zumba\CQRS\Provider\ClassProvider;
+use Zumba\CQRS\Provider\MethodProvider;
+use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use \Zumba\CQRS\Query\Query,
 	\Zumba\CQRS\Query\QueryResponse,
 	\Zumba\Util\Log;
@@ -34,6 +37,17 @@ class QueryBus {
 	 */
 	public static function fromProviders(Provider ...$providers) : QueryBus {
 		return new static(...$providers);
+	}
+
+	/**
+	 * Create a Bus with default providers.
+	 */
+	public static function defaultBus() : QueryBus {
+		return static::fromProviders(
+			new ClassProvider(),
+			new MethodProvider(),
+			new SimpleDependencyProvider()
+		);
 	}
 
 	/**

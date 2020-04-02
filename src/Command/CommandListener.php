@@ -80,6 +80,9 @@ abstract class CommandListener extends Listener {
 		} catch (NotFoundException $e) {
 			$event->notSupportedByListener();
 			return;
+		} catch (EventNotReady $e) {
+			$event->defer($e->maximumDelay(), $e->getMessage());
+			return;
 		} catch (\Throwable $e) {
 			$event->fail($e);
 		}

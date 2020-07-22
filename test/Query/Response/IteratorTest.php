@@ -33,5 +33,6 @@ class IteratorTest extends \Zumba\Service\Test\TestCase {
 		foreach ($response as $item) {
 			$this->assertContains($item, ["a","b","c"]);
 		}
+		$this->assertCount(3, $response);
 	}
 }

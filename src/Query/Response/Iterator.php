@@ -2,12 +2,26 @@
 
 namespace Zumba\CQRS\Query\Response;
 
-class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \JsonSerializable, Success {
+class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \JsonSerializable, \Countable, Success {
 
 	/**
 	 * @var \Iterator
 	 */
 	protected $data;
+
+	/**
+	 * Data that has been expanded from the iterator/generator.
+	 *
+	 * @var array
+	 */
+	protected $iteratedData = [];
+
+	/**
+	 * Internal count that is used when the iterator is iterated via external mechanism.
+	 *
+	 * @var int
+	 */
+	protected $internalCount = 0;
 
 	/**
 	 * Create a new Iterator response from an array
@@ -42,7 +56,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	 * @return array
 	 */
 	public function jsonSerialize() {
-		return iterator_to_array($this->data);
+		return $this->iterateData();
 	}
 
 	public function __toString() : string {
@@ -50,6 +64,28 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 			return json_encode($this->jsonSerialize()) ?: '';
 		}
 		return "Invalid Iterator.";
+	}
+
+	/**
+	 * Retrieve iterator data into array.
+	 *
+	 * @return array[int][mixed]
+	 */
+	private function iterateData() : array {
+		if (empty($this->iteratedData) && $this->valid()) {
+			$this->iteratedData = iterator_to_array($this->data);
+		}
+		return $this->iteratedData;
+	}
+
+	/**
+	 * Gives the count of the iterator.
+	 */
+	public function count() : int {
+		if (!$this->valid() && empty($this->iteratedData)) {
+			return $this->internalCount;
+		}
+		return count($this->iterateData());
 	}
 
 	/**
@@ -79,6 +115,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	 */
 	public function next() : void {
 		$this->data->next();
+		$this->internalCount++;
 	}
 
 	/**
@@ -88,6 +125,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
 	 */
 	public function rewind() : void {
 		$this->data->rewind();
+		$this->internalCount = 0;
 	}
 
 	/**

@@ -11,6 +11,10 @@ use \Zumba\CQRS\CommandBus,
 	\Zumba\CQRS\Response,
 	\Zumba\CQRS\Middleware,
 	\Zumba\CQRS\MiddlewarePipeline;
+use Zumba\CQRS\CommandService;
+use Zumba\CQRS\EventRegistryFactory;
+use Zumba\Symbiosis\Event\Event;
+use Zumba\Symbiosis\Event\EventRegistry;
 
 class TestResponse extends CommandResponse {}
 
@@ -26,6 +30,14 @@ class FailMiddleware implements Middleware {
 	}
 }
 
+class EventDispatchingCommandHandler implements Handler {
+	public function handle(Command $command, CommandService $commandService) : CommandResponse {
+		$commandService->eventDispatcher()->dispatch(new Event('something.happened', [
+			'foo' => 'bar'
+		]));
+		return CommandResponse::fromSuccess();
+	}
+}
 
 /**
  * @group cqrs
@@ -119,5 +131,29 @@ class CommandBusTest extends \Zumba\Service\Test\TestCase {
 
 		$bus = CommandBus::fromProviders($provider);
 		$bus->dispatch($dto);
+	}
+
+	public function testEventRegistration() {
+		$command = $this->getMockBuilder(Command::class)->getMock();
+		$handler = new EventDispatchingCommandHandler();
+		$provider = $this->getMockBuilder(Provider::class)->getMock();
+
+		$listener = $this->getMockBuilder(\stdClass::class)->setMethods(['listen'])->getMock();
+		$listener->expects($this->once())->method('listen')
+			->with($this->callback(function(Event $event) {
+				$this->assertEquals(['foo' => 'bar'], $event->data());
+				return true;
+			}));
+
+		$eventRegistry = new EventRegistry();
+		$eventRegistry->register('something.happened', [$listener, 'listen']);
+		$eventRegistryFactory = $this->getMockBuilder(EventRegistryFactory::class)->getMock();
+		$eventRegistryFactory->expects($this->once())->method('make')
+			->will($this->returnValue($eventRegistry));
+		$provider->expects($this->once())->method('getCommandHandler')
+			->with($command)
+			->will($this->returnValue($handler));
+		$bus = CommandBus::fromProviders($provider)->withEventRegistryFactory($eventRegistryFactory);
+		$bus->dispatch($command);
 	}
 }

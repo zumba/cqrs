@@ -28,10 +28,16 @@ class CommandBus {
 	protected $providers;
 
 	/**
+	 * @var \Zumba\CQRS\EventRegistryFactory
+	 */
+	protected $eventRegistryFactory;
+
+	/**
 	 * A Bus is a collection of handler providers.
 	 */
 	protected function __construct(Provider ...$providers) {
 		$this->providers = $providers;
+		$this->eventRegistryFactory = new BusEventRegistryFactory();
 	}
 
 	/**
@@ -50,6 +56,15 @@ class CommandBus {
 		$bus->middleware->append(function(Command $command) use ($bus) : CommandResponse {
 			return $bus->delegate($command);
 		});
+		return $bus;
+	}
+
+	/**
+	 * Attach an EventREgistryFactory to the bus.
+	 */
+	public function withEventRegistryFactory(EventRegistryFactory $factory) : CommandBus {
+		$bus = clone $this;
+		$bus->eventRegistryFactory = $factory;
 		return $bus;
 	}
 
@@ -85,7 +100,7 @@ class CommandBus {
 	protected function delegate(Command $command) : CommandResponse {
 		foreach ($this->providers as $provider) {
 			try {
-				$dispatcher = new EventRegistry();
+				$dispatcher = $this->eventRegistryFactory->make();
 				$handler = $provider->getCommandHandler($command);
 				$interfaces = class_implements($handler);
 				if (in_array(EventMapperProvider::class, $interfaces)) {

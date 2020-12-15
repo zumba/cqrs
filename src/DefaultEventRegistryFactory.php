@@ -5,7 +5,7 @@ namespace Zumba\CQRS;
 use Zumba\Symbiosis\Event\EventRegistry;
 use Zumba\Util\Log;
 
-final class BusEventRegistryFactory implements EventRegistryFactory {
+final class DefaultEventRegistryFactory implements EventRegistryFactory {
 
 	/**
 	 * Create a Symbiosis event registry.

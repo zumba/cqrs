@@ -9,7 +9,6 @@ use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Provider\MethodProvider;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use \Zumba\Util\Log;
-use \Zumba\Symbiosis\Event\EventRegistry;
 
 class CommandBus {
 
@@ -37,7 +36,7 @@ class CommandBus {
 	 */
 	protected function __construct(Provider ...$providers) {
 		$this->providers = $providers;
-		$this->eventRegistryFactory = new BusEventRegistryFactory();
+		$this->eventRegistryFactory = new DefaultEventRegistryFactory();
 	}
 
 	/**

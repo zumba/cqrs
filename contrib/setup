@@ -1,0 +1,8 @@
+#!/bin/bash
+
+CONTRIB=`php -r "echo dirname(realpath('$0'));"`
+PROJECT=$CONTRIB/..
+
+# Hooks
+cp $CONTRIB/pre-commit $PROJECT/.git/hooks/pre-commit
+chmod +x $PROJECT/.git/hooks/pre-commit

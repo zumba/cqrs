@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Middleware;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LogLevel;
 use Zumba\CQRS\DTO;
 use Zumba\CQRS\Middleware;
 use Zumba\CQRS\Response;
-use Zumba\Util\Log;
 
 class Logger implements Middleware
 {
+    use LoggerAwareTrait;
+
     /**
      * Log level to use for all logging.
      *
-     * @var integer
+     * @var string
      */
     protected $level;
 
     /**
      * Logger Middleware logs all commands
      */
-    protected function __construct(int $level)
+    protected function __construct(string $level)
     {
         $this->level = $level;
     }
@@ -29,7 +32,7 @@ class Logger implements Middleware
     /**
      * Create a Logger middleware from a particular Log Level
      */
-    public static function fromLevel(int $level = Log::LEVEL_INFO): Logger
+    public static function fromLevel(string $level = LogLevel::INFO): Logger
     {
         return new static($level);
     }
@@ -39,7 +42,7 @@ class Logger implements Middleware
      */
     public function handle(DTO $dto, callable $next): Response
     {
-        Log::write(sprintf('DTO dispatched to handlers: %s', get_class($dto)), $this->level, 'cqrs');
+        $this->logger?->{$this->level}(sprintf('DTO dispatched to handlers: %s', get_class($dto)));
         return $next($dto);
     }
 }

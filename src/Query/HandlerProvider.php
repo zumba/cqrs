@@ -1,15 +1,18 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Query;
 
-interface HandlerProvider {
+interface HandlerProvider
+{
 
-	/**
-	 * Find a Query handler for the bus.
-	 *
-	 * It should throw an exception if it cannot find the handler.
-	 *
-	 * @return Handler
-	 */
-	public function getQueryHandler(Query $dto) : Handler;
+    /**
+     * Find a Query handler for the bus.
+     *
+     * It should throw an exception if it cannot find the handler.
+     *
+     * @return Handler
+     */
+    public function getQueryHandler(Query $dto): Handler;
 }

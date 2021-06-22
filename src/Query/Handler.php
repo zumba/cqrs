@@ -1,11 +1,14 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Query;
 
-interface Handler {
+interface Handler
+{
 
-	/**
-	 * Handle a Query
-	 */
-	public function handle(Query $dto) : QueryResponse;
+    /**
+     * Handle a Query
+     */
+    public function handle(Query $dto): QueryResponse;
 }

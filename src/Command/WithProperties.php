@@ -1,12 +1,14 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
+interface WithProperties
+{
 
-interface WithProperties {
-
-	/**
-	 * Create a Command from an array of data.
-	 */
-	public static function fromArray(array $props) : Command;
+    /**
+     * Create a Command from an array of data.
+     */
+    public static function fromArray(array $props): Command;
 }

@@ -1,10 +1,13 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
-use \Zumba\Primer\Model\EventQueue\Event;
+use Zumba\Primer\Model\EventQueue\Event;
 
-interface WithEvent {
+interface WithEvent
+{
 
-	public static function fromEvent(Event $event) : Command;
+    public static function fromEvent(Event $event): Command;
 }

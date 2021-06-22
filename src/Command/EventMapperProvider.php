@@ -1,11 +1,14 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
-interface EventMapperProvider {
+interface EventMapperProvider
+{
 
-	/**
-	 * Provide an EventMapper interface
-	 */
-	public function eventMapper() : EventMapper;
+    /**
+     * Provide an EventMapper interface
+     */
+    public function eventMapper(): EventMapper;
 }

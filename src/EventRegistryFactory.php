@@ -1,13 +1,16 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
 use Zumba\Symbiosis\Event\EventRegistry;
 
-interface EventRegistryFactory {
+interface EventRegistryFactory
+{
 
-	/**
-	 * Create a Symbiosis event registry.
-	 */
-	public function make() : EventRegistry;
+    /**
+     * Create a Symbiosis event registry.
+     */
+    public function make(): EventRegistry;
 }

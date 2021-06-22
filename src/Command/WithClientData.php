@@ -1,13 +1,16 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
-use \Zumba\CQRS\ClientData;
+use Zumba\CQRS\ClientData;
 
-interface WithClientData {
+interface WithClientData
+{
 
-	/**
-	 * Create a Command from a ClientData object
-	 */
-	public static function fromClientData(ClientData $clientData) : Command;
+    /**
+     * Create a Command from a ClientData object
+     */
+    public static function fromClientData(ClientData $clientData): Command;
 }

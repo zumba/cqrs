@@ -1,15 +1,18 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
-interface HandlerProvider {
+interface HandlerProvider
+{
 
-	/**
-	 * Find a command handler for the bus.
-	 *
-	 * It should throw an exception if it cannot find the handler.
-	 *
-	 * @return Handler
-	 */
-	public function getCommandHandler(Command $dto) : Handler;
+    /**
+     * Find a command handler for the bus.
+     *
+     * It should throw an exception if it cannot find the handler.
+     *
+     * @return Handler
+     */
+    public function getCommandHandler(Command $dto): Handler;
 }

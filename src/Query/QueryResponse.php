@@ -12,7 +12,6 @@ use Zumba\CQRS\Query\Response\Failure;
 
 abstract class QueryResponse implements Response
 {
-
     /**
      * Query Response
      */

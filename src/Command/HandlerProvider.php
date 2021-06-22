@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Command;
 
 interface HandlerProvider
 {
-
     /**
      * Find a command handler for the bus.
      *

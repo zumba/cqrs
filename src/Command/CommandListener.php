@@ -19,7 +19,6 @@ use Zumba\Util\Log;
 
 abstract class CommandListener extends Listener
 {
-
     /**
      * @var \Zumba\CQRS\CommandBus
      */

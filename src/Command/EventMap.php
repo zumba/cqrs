@@ -9,7 +9,6 @@ use Zumba\Util\Log;
 
 class EventMap
 {
-
     /**
      * @var array
      */

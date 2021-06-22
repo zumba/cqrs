@@ -8,7 +8,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 interface CommandService
 {
-
     /**
      * Get an EventDispatcherInterface
      */

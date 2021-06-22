@@ -8,6 +8,5 @@ use Zumba\Primer\Model\EventQueue\Event;
 
 interface WithEvent
 {
-
     public static function fromEvent(Event $event): Command;
 }

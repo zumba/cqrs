@@ -17,7 +17,6 @@ use Zumba\CQRS\Query\Query;
  */
 class SimpleDependencyProvider implements \Zumba\CQRS\Provider
 {
-
     /**
      * Extract the factory name from the DTO and return it.
      *

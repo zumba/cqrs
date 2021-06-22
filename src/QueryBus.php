@@ -13,7 +13,6 @@ use Zumba\Util\Log;
 
 class QueryBus
 {
-
     /**
      * A middlewarePipeline
      *

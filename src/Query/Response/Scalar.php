@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Query\Response;
 
 class Scalar extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, Success
 {
-
     /**
      * @var mixed any scalar value (integer|float|string|boolean)
      */

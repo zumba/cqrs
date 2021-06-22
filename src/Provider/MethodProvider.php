@@ -19,7 +19,6 @@ use Zumba\CQRS\Provider;
  */
 class MethodProvider implements Provider
 {
-
     /**
      * Extract the handler name from the DTO and return it.
      *

@@ -12,7 +12,6 @@ use Zumba\Util\Log;
 
 trait QueryBusTrait
 {
-
     protected function queryBus(): QueryBus
     {
         $bus = QueryBus::fromProviders(

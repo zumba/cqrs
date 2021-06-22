@@ -6,7 +6,6 @@ namespace Zumba\CQRS;
 
 interface Middleware
 {
-
     /**
      * Pipe a DTO through middleware.
      *

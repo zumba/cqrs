@@ -9,7 +9,6 @@ use Zumba\CQRS\Command\Response\Failure;
 
 abstract class CommandResponse implements \Zumba\CQRS\Response
 {
-
     /**
      * Command Response
      */

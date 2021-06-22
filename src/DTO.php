@@ -6,7 +6,6 @@ namespace Zumba\CQRS;
 
 abstract class DTO
 {
-
     /**
      * Allow access to defined properties.
      *

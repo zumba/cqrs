@@ -9,7 +9,6 @@ use Zumba\Util\Log;
 
 final class DefaultEventRegistryFactory implements EventRegistryFactory
 {
-
     /**
      * Create a Symbiosis event registry.
      */

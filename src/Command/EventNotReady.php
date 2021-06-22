@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Command;
 
 final class EventNotReady extends \RuntimeException
 {
-
     /**
      * The maximum amount of deferment time.
      *

@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Command\Response;
 
 class Success extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerializable
 {
-
     /**
      * Create a new Success response.
      *

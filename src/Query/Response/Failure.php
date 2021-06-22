@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Query\Response;
 
 class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable
 {
-
     /**
      * @var \Throwable
      */

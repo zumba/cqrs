@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Query;
 
 interface HandlerFactory
 {
-
     /**
      * Build a Handler
      */

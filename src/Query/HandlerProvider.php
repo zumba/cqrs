@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Query;
 
 interface HandlerProvider
 {
-
     /**
      * Find a Query handler for the bus.
      *

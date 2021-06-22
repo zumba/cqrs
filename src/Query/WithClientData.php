@@ -8,7 +8,6 @@ use Zumba\CQRS\ClientData;
 
 interface WithClientData
 {
-
     /**
      * Create a Query from a ClientData object
      */

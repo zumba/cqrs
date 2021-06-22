@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Command;
 
 interface WithProperties
 {
-
     /**
      * Create a Command from an array of data.
      */

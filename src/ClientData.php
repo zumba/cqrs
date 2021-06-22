@@ -6,7 +6,6 @@ namespace Zumba\CQRS;
 
 interface ClientData
 {
-
     /**
      * Locale of the client issuing the DTO
      */

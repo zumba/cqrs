@@ -6,7 +6,6 @@ namespace Zumba\CQRS;
 
 class MiddlewarePipeline
 {
-
     /**
      * A middleware Closure
      *

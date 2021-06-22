@@ -9,7 +9,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 class CommandService implements \Zumba\CQRS\CommandService
 {
-
     /**
      * An event dispatcher interface
      *

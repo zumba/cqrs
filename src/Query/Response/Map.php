@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Query\Response;
 
 class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, \ArrayAccess, Success
 {
-
     /**
      * @var array
      */

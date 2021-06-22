@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Command;
 
 interface EventMapperProvider
 {
-
     /**
      * Provide an EventMapper interface
      */

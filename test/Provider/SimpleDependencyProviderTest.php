@@ -14,7 +14,6 @@ use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\PrivateConstructorCommand;
 
 class SimpleDependencyProviderTest extends TestCase
 {
-
     /**
      * @expectedException \Zumba\CQRS\Provider\InvalidDependency
      */

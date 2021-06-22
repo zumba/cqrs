@@ -8,7 +8,6 @@ use Zumba\CQRS\CommandService;
 
 interface Handler
 {
-
     /**
      * Handle a Command
      */

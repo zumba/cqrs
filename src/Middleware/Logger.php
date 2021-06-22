@@ -11,7 +11,6 @@ use Zumba\Util\Log;
 
 class Logger implements Middleware
 {
-
     /**
      * Log level to use for all logging.
      *

@@ -14,7 +14,6 @@ use Zumba\Util\Log;
 
 class CommandBus
 {
-
     /**
      * A middlewarePipeline
      *

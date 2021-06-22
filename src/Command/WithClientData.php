@@ -8,7 +8,6 @@ use Zumba\CQRS\ClientData;
 
 interface WithClientData
 {
-
     /**
      * Create a Command from a ClientData object
      */

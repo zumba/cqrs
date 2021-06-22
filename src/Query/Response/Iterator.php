@@ -6,7 +6,6 @@ namespace Zumba\CQRS\Query\Response;
 
 class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \JsonSerializable, \Countable, Success
 {
-
     /**
      * @var \Iterator
      */

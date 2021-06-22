@@ -8,7 +8,6 @@ use Zumba\Symbiosis\Event\EventRegistry;
 
 interface EventRegistryFactory
 {
-
     /**
      * Create a Symbiosis event registry.
      */

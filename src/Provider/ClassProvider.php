@@ -20,7 +20,6 @@ use Zumba\CQRS\Query\Query;
  */
 class ClassProvider implements Provider
 {
-
     /**
      * Extract the factory name from the DTO and return it.
      *

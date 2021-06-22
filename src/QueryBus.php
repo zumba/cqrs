@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
+use Psr\Log\LoggerAwareTrait;
 use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Provider\MethodProvider;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use Zumba\CQRS\Query\Query;
 use Zumba\CQRS\Query\QueryResponse;
-use Zumba\Util\Log;
 
 class QueryBus
 {
+    use LoggerAwareTrait;
+
     /**
      * A middlewarePipeline
      *
@@ -91,7 +93,7 @@ class QueryBus
             try {
                 return $provider->getQueryHandler($query)->handle($query);
             } catch (HandlerNotFound $e) {
-                Log::write(sprintf("Handler not found by %s", get_class($provider)), Log::LEVEL_INFO, "cqrs");
+                $this->logger?->info(sprintf("Handler not found by %s", get_class($provider)));
             }
         }
         throw new InvalidHandler("Could not find a handler for " . get_class($query));

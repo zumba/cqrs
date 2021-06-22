@@ -8,7 +8,6 @@ use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Provider\MethodProvider;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use Zumba\CQRS\Middleware\Logger;
-use Zumba\Util\Log;
 
 trait QueryBusTrait
 {

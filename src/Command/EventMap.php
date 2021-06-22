@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
+use Psr\Log\LoggerAwareTrait;
+use Zumba\CQRS\Command\Response\Failure;
 use Zumba\CQRS\CommandBus;
-use Zumba\Util\Log;
 
 class EventMap
 {
+    use LoggerAwareTrait;
+
     /**
      * @var array
      */
@@ -137,9 +140,9 @@ class EventMap
      */
     protected function handle(Command $command, CommandResponse $response): void
     {
-        if ($response instanceof Response\Failure) {
+        if ($response instanceof Failure) {
             $name = get_class($command);
-            Log::getInstance()->warning(
+            $this->logger?->warning(
                 "Command `$name` dispatched by an event listener failed: " .
                 $response->getError()->getMessage()
             );

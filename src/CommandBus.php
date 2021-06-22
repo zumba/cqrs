@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
+use Psr\Log\LoggerAwareTrait;
 use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\Command\CommandResponse;
 use Zumba\CQRS\Command\EventMapperProvider;
 use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Provider\MethodProvider;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
-use Zumba\Util\Log;
 
 class CommandBus
 {
+    use LoggerAwareTrait;
+
     /**
      * A middlewarePipeline
      *
@@ -119,7 +121,7 @@ class CommandBus
                 }
                 return $handler->handle($command, \Zumba\CQRS\Command\CommandService::make($dispatcher, $this));
             } catch (HandlerNotFound $e) {
-                Log::write(sprintf("Handler not found by %s", get_class($provider)), Log::LEVEL_INFO, "cqrs");
+                $this->logger?->info(sprintf("Handler not found by %s", get_class($provider)));
             }
         }
         throw new InvalidHandler("Could not find a handler for " . get_class($command));

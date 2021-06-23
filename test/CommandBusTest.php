@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zumba\CQRS\Test;
 
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\Command\Handler;
 use Zumba\CQRS\CommandBus;
@@ -16,7 +15,7 @@ use Zumba\CQRS\Provider;
 use Zumba\CQRS\Test\Stub\EventDispatchingCommandHandler;
 use Zumba\CQRS\Test\Stub\FailMiddleware;
 use Zumba\CQRS\Test\Stub\Listener;
-use Zumba\CQRS\Test\Stub\OkMiddleware;
+use Zumba\CQRS\Test\Stub\OKMiddleware;
 use Zumba\Symbiosis\Event\Event;
 use Zumba\Symbiosis\Event\EventRegistry;
 
@@ -62,7 +61,7 @@ class CommandBusTest extends TestCase
 
 
         $bus = CommandBus::fromProviders($providerNotFound, $providerNotFound, $provider);
-        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware());
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OKMiddleware());
         $bus->withMiddleware($pipeline)->dispatch($command);
     }
 
@@ -85,7 +84,7 @@ class CommandBusTest extends TestCase
             ->method('getQueryHandler');
 
         $bus = CommandBus::fromProviders($provider);
-        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware(), new FailMiddleware());
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OKMiddleware(), new FailMiddleware());
         $bus->withMiddleware($pipeline)->dispatch($command);
     }
 

@@ -8,7 +8,7 @@ use Zumba\CQRS\DTO;
 use Zumba\CQRS\Middleware;
 use Zumba\CQRS\Response;
 
-class OkMiddleware implements Middleware
+class OKMiddleware implements Middleware
 {
     public function handle(DTO $dto, callable $next): Response
     {

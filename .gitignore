@@ -1,2 +1,5 @@
 .phpunit.result.cache
 vendor/
+
+# Ignore composer.lock since this is library, see https://getcomposer.org/doc/02-libraries.md#lock-file
+composer.lock

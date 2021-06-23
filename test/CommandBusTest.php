@@ -10,6 +10,7 @@ use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\Command\Handler;
 use Zumba\CQRS\CommandBus;
 use Zumba\CQRS\EventRegistryFactory;
+use Zumba\CQRS\InvalidHandler;
 use Zumba\CQRS\MiddlewarePipeline;
 use Zumba\CQRS\Provider;
 use Zumba\CQRS\Test\Fixture\EventDispatchingCommandHandler;
@@ -25,9 +26,6 @@ class CommandBusTest extends TestCase
     {
         /** @var Command&\PHPUnit\Framework\MockObject\MockObject */
         $command = $this->getMockBuilder(Command::class)->getMock();
-        $middle = $this->getMockBuilder(OkMiddleware::class)
-            ->onlyMethods(['handle'])
-            ->getMock();
 
         $handler = $this->getMockBuilder(Handler::class)
             ->getMock();
@@ -72,9 +70,6 @@ class CommandBusTest extends TestCase
     {
         /** @var Command&\PHPUnit\Framework\MockObject\MockObject */
         $command = $this->getMockBuilder(Command::class)->getMock();
-        $middle = $this->getMockBuilder(OkMiddleware::class)
-            ->onlyMethods(['handle'])
-            ->getMock();
 
         /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
         $provider = $this->getMockBuilder(Provider::class)
@@ -94,9 +89,6 @@ class CommandBusTest extends TestCase
         $bus->withMiddleware($pipeline)->dispatch($command);
     }
 
-    /**
-     * @expectedException \Zumba\CQRS\InvalidHandler
-     */
     public function testDelegateNotFound(): void
     {
         /** @var Command&\PHPUnit\Framework\MockObject\MockObject */
@@ -117,6 +109,7 @@ class CommandBusTest extends TestCase
             ->method('getQueryHandler');
 
         $bus = CommandBus::fromProviders($provider);
+        $this->expectException(InvalidHandler::class);
         $bus->dispatch($dto);
     }
 

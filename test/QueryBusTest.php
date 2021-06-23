@@ -6,13 +6,14 @@ namespace Zumba\CQRS\Test;
 
 use PHPUnit\Framework\TestCase;
 use Zumba\CQRS\HandlerNotFound;
+use Zumba\CQRS\InvalidHandler;
 use Zumba\CQRS\MiddlewarePipeline;
 use Zumba\CQRS\Provider;
 use Zumba\CQRS\Query\Handler;
 use Zumba\CQRS\Query\Query;
 use Zumba\CQRS\QueryBus;
-use Zumba\CQRS\Test\Fixture\FailMiddleware;
 use Zumba\CQRS\Test\Fixture\OkMiddleware;
+use Zumba\CQRS\Test\Fixture\QueryBus\FailQueryMiddleware;
 
 class QueryBusTest extends TestCase
 {
@@ -79,13 +80,10 @@ class QueryBusTest extends TestCase
             ->method('getCommandHandler');
 
         $bus = QueryBus::fromProviders($provider);
-        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware(), new FailMiddleware());
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware(), new FailQueryMiddleware());
         $bus->withMiddleware($pipeline)->dispatch($Query);
     }
 
-    /**
-     * @expectedException \Zumba\CQRS\InvalidHandler
-     */
     public function testDelegateNotFound(): void
     {
         /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
@@ -106,6 +104,7 @@ class QueryBusTest extends TestCase
             ->method('getCommandHandler');
 
         $bus = QueryBus::fromProviders($provider);
+        $this->expectException(InvalidHandler::class);
         $bus->dispatch($dto);
     }
 }

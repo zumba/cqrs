@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\HandlerNotFound;
+use Zumba\CQRS\InvalidHandler;
 use Zumba\CQRS\Query\Query;
 use Zumba\CQRS\Test\Fixture\SomeCommand;
 use Zumba\CQRS\Test\Fixture\SomeQuery;
@@ -33,23 +34,19 @@ class ClassProviderTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Zumba\CQRS\InvalidHandler
-     */
     public function testGetHandlerThrowsIfNotImplemented(): void
     {
         $provider = new ClassProvider();
         $command = new SomeCommand();
+        $this->expectException(InvalidHandler::class);
         $provider->getCommandHandler($command);
     }
 
-    /**
-     * @expectedException \Zumba\CQRS\InvalidHandler
-     */
     public function testGetHandlerThrowsIfNotImplementedQuery(): void
     {
         $provider = new ClassProvider();
         $command = new SomeQuery();
+        $this->expectException(InvalidHandler::class);
         $provider->getQueryHandler($command);
     }
 }

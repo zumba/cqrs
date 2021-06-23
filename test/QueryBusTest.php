@@ -12,7 +12,7 @@ use Zumba\CQRS\Provider;
 use Zumba\CQRS\Query\Handler;
 use Zumba\CQRS\Query\Query;
 use Zumba\CQRS\QueryBus;
-use Zumba\CQRS\Test\Stub\OkMiddleware;
+use Zumba\CQRS\Test\Stub\OKMiddleware;
 use Zumba\CQRS\Test\Stub\QueryBus\FailQueryMiddleware;
 
 class QueryBusTest extends TestCase
@@ -57,7 +57,7 @@ class QueryBusTest extends TestCase
 
 
         $bus = QueryBus::fromProviders($providerNotFound, $providerNotFound, $provider);
-        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware());
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OKMiddleware());
         $bus->withMiddleware($pipeline)->dispatch($Query);
     }
 
@@ -80,7 +80,7 @@ class QueryBusTest extends TestCase
             ->method('getCommandHandler');
 
         $bus = QueryBus::fromProviders($provider);
-        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware(), new FailQueryMiddleware());
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OKMiddleware(), new FailQueryMiddleware());
         $bus->withMiddleware($pipeline)->dispatch($Query);
     }
 

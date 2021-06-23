@@ -1,0 +1,36 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['7.2', '7.3', '7.4', '8.0']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        coverage: none
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: PSR-12 compliance check
+      run: composer run-script cs-check
+
+    - name: Check for PHPStan errors
+      run: composer run-script phpstan
+
+    - name: Run test suite
+      run: composer run-script test

@@ -1,123 +1,110 @@
-<?php declare(strict_types = 1);
+<?php
 
-namespace Zumba\Test\CQRS;
+declare(strict_types=1);
 
-use \Zumba\CQRS\QueryBus,
-	\Zumba\CQRS\DTO,
-	\Zumba\CQRS\Query\Query,
-	\Zumba\CQRS\Query\QueryResponse,
-	\Zumba\CQRS\Query\Handler,
-	\Zumba\CQRS\Provider,
-	\Zumba\CQRS\Response,
-	\Zumba\CQRS\Middleware,
-	\Zumba\CQRS\MiddlewarePipeline;
+namespace Zumba\CQRS\Test;
 
-class TestQueryResponse extends QueryResponse {}
+use PHPUnit\Framework\TestCase;
+use Zumba\CQRS\HandlerNotFound;
+use Zumba\CQRS\InvalidHandler;
+use Zumba\CQRS\MiddlewarePipeline;
+use Zumba\CQRS\Provider;
+use Zumba\CQRS\Query\Handler;
+use Zumba\CQRS\Query\Query;
+use Zumba\CQRS\QueryBus;
+use Zumba\CQRS\Test\Stub\OkMiddleware;
+use Zumba\CQRS\Test\Stub\QueryBus\FailQueryMiddleware;
 
-class OkQueryMiddleware implements Middleware {
-	public function handle(DTO $dto, callable $next) : Response {
-		return $next($dto);
-	}
-}
+class QueryBusTest extends TestCase
+{
+    public function testHandle(): void
+    {
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
+        $Query = $this->getMockBuilder(Query::class)->getMock();
 
-class FailQueryMiddleware implements Middleware {
-	public function handle(DTO $dto, callable $next) : Response {
-		return TestQueryResponse::fromThrowable(new \Exception('failed'));
-	}
-}
+        $handler = $this->getMockBuilder(Handler::class)
+            ->getMock();
 
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
+        $providerNotFound = $this->getMockBuilder(Provider::class)
+            ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
+            ->getMock();
 
-/**
- * @group cqrs
- * @group query
- */
-class QueryBusTest extends \Zumba\Service\Test\TestCase {
-	public function testHandle() {
-		$Query = $this->getMockBuilder(Query::class)->getMock();
-		$middle = $this->getMockBuilder(OkQueryMiddleware::class)
-			->setMethods(['handle'])
-			->getMock();
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
+        $provider = $this->getMockBuilder(Provider::class)
+            ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
+            ->getMock();
 
-		$handler = $this->getMockBuilder(Handler::class)
-			->getMock();
+        $provider
+            ->expects($this->once())
+            ->method('getQueryHandler')
+            ->with($Query)
+            ->will($this->returnValue($handler));
 
-		$providerNotFound = $this->getMockBuilder(Provider::class)
-			->setMethods(['getQueryHandler', 'getCommandHandler'])
-			->getMock();
+        $provider
+            ->expects($this->never())
+            ->method('getCommandHandler');
 
-		$provider = $this->getMockBuilder(Provider::class)
-			->setMethods(['getQueryHandler', 'getCommandHandler'])
-			->getMock();
+        $providerNotFound
+            ->expects($this->exactly(2))
+            ->method('getQueryHandler')
+            ->with($Query)
+            ->will($this->throwException(new HandlerNotFound()));
 
-		$provider
-			->expects($this->once())
-			->method('getQueryHandler')
-			->with($Query)
-			->will($this->returnValue($handler));
-
-		$provider
-			->expects($this->never())
-			->method('getCommandHandler');
-
-		$providerNotFound
-			->expects($this->exactly(2))
-			->method('getQueryHandler')
-			->with($Query)
-			->will($this->throwException(new \Zumba\CQRS\HandlerNotFound()));
-
-		$providerNotFound
-			->expects($this->never())
-			->method('getCommandHandler');
+        $providerNotFound
+            ->expects($this->never())
+            ->method('getCommandHandler');
 
 
-		$bus = QueryBus::fromProviders($providerNotFound, $providerNotFound, $provider);
-		$pipeline = MiddlewarePipeline::fromMiddleware(new OkQueryMiddleware());
-		$bus->withMiddleware($pipeline)->dispatch($Query);
-	}
+        $bus = QueryBus::fromProviders($providerNotFound, $providerNotFound, $provider);
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware());
+        $bus->withMiddleware($pipeline)->dispatch($Query);
+    }
 
-	public function testHandleMiddlewareFailure() {
-		$Query = $this->getMockBuilder(Query::class)->getMock();
-		$middle = $this->getMockBuilder(OkQueryMiddleware::class)
-			->setMethods(['handle'])
-			->getMock();
+    public function testHandleMiddlewareFailure(): void
+    {
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
+        $Query = $this->getMockBuilder(Query::class)->getMock();
 
-		$provider = $this->getMockBuilder(Provider::class)
-			->setMethods(['getQueryHandler', 'getCommandHandler'])
-			->getMock();
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
+        $provider = $this->getMockBuilder(Provider::class)
+            ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
+            ->getMock();
 
-		$provider
-			->expects($this->never())
-			->method('getQueryHandler');
+        $provider
+            ->expects($this->never())
+            ->method('getQueryHandler');
 
-		$provider
-			->expects($this->never())
-			->method('getCommandHandler');
+        $provider
+            ->expects($this->never())
+            ->method('getCommandHandler');
 
-		$bus = QueryBus::fromProviders($provider);
-		$pipeline = MiddlewarePipeline::fromMiddleware(new OkQueryMiddleware(), new FailQueryMiddleware());
-		$bus->withMiddleware($pipeline)->dispatch($Query);
-	}
+        $bus = QueryBus::fromProviders($provider);
+        $pipeline = MiddlewarePipeline::fromMiddleware(new OkMiddleware(), new FailQueryMiddleware());
+        $bus->withMiddleware($pipeline)->dispatch($Query);
+    }
 
-	/**
-	 * @expectedException \Zumba\CQRS\InvalidHandler
-	 */
-	public function testDelegateNotFound() {
-		$dto = $this->getMockBuilder(Query::class)->getMock();
-		$provider = $this->getMockBuilder(Provider::class)
-			->setMethods(['getQueryHandler', 'getCommandHandler'])
-			->getMock();
+    public function testDelegateNotFound(): void
+    {
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
+        $dto = $this->getMockBuilder(Query::class)->getMock();
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
+        $provider = $this->getMockBuilder(Provider::class)
+            ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
+            ->getMock();
 
-		$provider
-			->expects($this->once())
-			->method('getQueryHandler')
-			->with($dto)
-			->will($this->throwException(new \Zumba\CQRS\HandlerNotFound()));
+        $provider
+            ->expects($this->once())
+            ->method('getQueryHandler')
+            ->with($dto)
+            ->will($this->throwException(new \Zumba\CQRS\HandlerNotFound()));
 
-		$provider
-			->expects($this->never())
-			->method('getCommandHandler');
+        $provider
+            ->expects($this->never())
+            ->method('getCommandHandler');
 
-		$bus = QueryBus::fromProviders($provider);
-		$bus->dispatch($dto);
-	}
+        $bus = QueryBus::fromProviders($provider);
+        $this->expectException(InvalidHandler::class);
+        $bus->dispatch($dto);
+    }
 }

@@ -1,18 +1,20 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
-use \Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
-interface CommandService {
+interface CommandService
+{
+    /**
+     * Get an EventDispatcherInterface
+     */
+    public function eventDispatcher(): EventDispatcherInterface;
 
-	/**
-	 * Get an EventDispatcherInterface
-	 */
-	public function eventDispatcher() : EventDispatcherInterface;
-
-	/**
-	 * Get a CommandBus
-	 */
-	public function commandBus() : CommandBus;
+    /**
+     * Get a CommandBus
+     */
+    public function commandBus(): CommandBus;
 }

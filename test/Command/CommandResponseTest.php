@@ -1,20 +1,23 @@
-<?php declare(strict_types = 1);
+<?php
 
-namespace Zumba\Test\CQRS\Command;
+declare(strict_types=1);
 
-use \Zumba\CQRS\Command\CommandResponse,
-	\Zumba\CQRS\Command\Response\Success,
-	\Zumba\CQRS\Command\Response\Failure;
+namespace Zumba\CQRS\Test\Command;
 
-/**
- * @group cqrs
- * @group command
- */
-class CommandResponseTest extends \Zumba\Service\Test\TestCase {
-	public function testOk() {
-		$this->assertInstanceOf(Success::class, CommandResponse::fromSuccess());
-	}
-	public function testFail() {
-		$this->assertInstanceOf(Failure::class, CommandResponse::fromThrowable(new \Exception()));
-	}
+use PHPUnit\Framework\TestCase;
+use Zumba\CQRS\Command\CommandResponse;
+use Zumba\CQRS\Command\Response\Failure;
+use Zumba\CQRS\Command\Response\Success;
+
+class CommandResponseTest extends TestCase
+{
+    public function testOk(): void
+    {
+        $this->assertInstanceOf(Success::class, CommandResponse::fromSuccess());
+    }
+
+    public function testFail(): void
+    {
+        $this->assertInstanceOf(Failure::class, CommandResponse::fromThrowable(new \Exception()));
+    }
 }

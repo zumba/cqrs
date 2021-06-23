@@ -1,50 +1,52 @@
-<?php declare(strict_types = 1);
+<?php
 
-namespace Zumba\Test\CQRS\Provider;
+declare(strict_types=1);
 
-use \Zumba\CQRS\Provider\ClassProvider,
-	\Zumba\CQRS\Command\Command,
-	\Zumba\CQRS\Query\Query;
+namespace Zumba\CQRS\Test\Provider;
 
-class Foo extends Command {}
-class FooQuery extends Query {}
-class FooHandlerFactory {}
-class FooQueryHandlerFactory {}
+use PHPUnit\Framework\TestCase;
+use Zumba\CQRS\Provider\ClassProvider;
+use Zumba\CQRS\Command\Command;
+use Zumba\CQRS\HandlerNotFound;
+use Zumba\CQRS\InvalidHandler;
+use Zumba\CQRS\Query\Query;
+use Zumba\CQRS\Test\Stub\SomeCommand;
+use Zumba\CQRS\Test\Stub\SomeQuery;
 
-/**
- * @group cqrs
- */
-class ClassProviderTest extends \Zumba\Service\Test\TestCase {
-	public function testGetHandler() {
-		$provider = new ClassProvider();
-		$command = $this->getMockBuilder(Command::class)->getMock();
-		try {
-			$provider->getCommandHandler($this->getMockBuilder(Command::class)->getMock());
-		} catch(\Exception $e) {
-			$this->assertInstanceOf(\Zumba\CQRS\HandlerNotFound::class, $e);
-		}
-		try {
-			$provider->getQueryHandler($this->getMockBuilder(Query::class)->getMock());
-		} catch(\Exception $e) {
-			$this->assertInstanceOf(\Zumba\CQRS\HandlerNotFound::class, $e);
-		}
-	}
+class ClassProviderTest extends TestCase
+{
+    public function testGetHandler(): void
+    {
+        $provider = new ClassProvider();
+        /** @var Command&\PHPUnit\Framework\MockObject\MockObject */
+        $command = $this->getMockBuilder(Command::class)->getMock();
+        try {
+            $provider->getCommandHandler($command);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(HandlerNotFound::class, $e);
+        }
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
+        $query = $this->getMockBuilder(Query::class)->getMock();
+        try {
+            $provider->getQueryHandler($query);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(HandlerNotFound::class, $e);
+        }
+    }
 
-	/**
-	 * @expectedException \Zumba\CQRS\InvalidHandler
-	 */
-	public function testGetHandlerThrowsIfNotImplemented() {
-		$provider = new ClassProvider();
-		$command = new Foo();
-		$provider->getCommandHandler($command);
-	}
+    public function testGetHandlerThrowsIfNotImplemented(): void
+    {
+        $provider = new ClassProvider();
+        $command = new SomeCommand();
+        $this->expectException(InvalidHandler::class);
+        $provider->getCommandHandler($command);
+    }
 
-	/**
-	 * @expectedException \Zumba\CQRS\InvalidHandler
-	 */
-	public function testGetHandlerThrowsIfNotImplementedQuery() {
-		$provider = new ClassProvider();
-		$command = new FooQuery();
-		$provider->getQueryHandler($command);
-	}
+    public function testGetHandlerThrowsIfNotImplementedQuery(): void
+    {
+        $provider = new ClassProvider();
+        $command = new SomeQuery();
+        $this->expectException(InvalidHandler::class);
+        $provider->getQueryHandler($command);
+    }
 }

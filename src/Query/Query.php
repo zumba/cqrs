@@ -1,6 +1,9 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zumba\CQRS\Query;
 
-abstract class Query extends \Zumba\CQRS\DTO {
+abstract class Query extends \Zumba\CQRS\DTO
+{
 }

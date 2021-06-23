@@ -1,23 +1,24 @@
-<?php declare(strict_types = 1);
+<?php
 
-namespace Zumba\Test\CQRS\Command\Response;
+declare(strict_types=1);
 
-use \Zumba\CQRS\Command\CommandResponse,
-	\Zumba\CQRS\Command\Response\Failure;
+namespace Zumba\CQRS\Test\Command\Response;
 
-/**
- * @group cqrs
- * @group command
- */
-class FailureTest extends \Zumba\Service\Test\TestCase {
-	public function testError() {
-		$e = new \Exception('test');
-		$response = CommandResponse::fromThrowable($e);
-		$this->assertSame($e, $response->getError());
-	}
+use PHPUnit\Framework\TestCase;
+use Zumba\CQRS\Command\CommandResponse;
 
-	public function testMeta() {
-		$response = CommandResponse::fromThrowable(new \Exception('test'))->withMeta(['foo' => 'bar']);
-		$this->assertEquals(['foo' => 'bar'], $response->getMeta());
-	}
+class FailureTest extends TestCase
+{
+    public function testError(): void
+    {
+        $e = new \Exception('test');
+        $response = CommandResponse::fromThrowable($e);
+        $this->assertSame($e, $response->getError());
+    }
+
+    public function testMeta(): void
+    {
+        $response = CommandResponse::fromThrowable(new \Exception('test'))->withMeta(['foo' => 'bar']);
+        $this->assertEquals(['foo' => 'bar'], $response->getMeta());
+    }
 }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Provider\MethodProvider;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
@@ -13,8 +14,6 @@ use Zumba\CQRS\Query\QueryResponse;
 
 final class QueryBus
 {
-    use LoggerAwareTrait;
-
     /**
      * A middlewarePipeline
      *
@@ -30,11 +29,19 @@ final class QueryBus
     protected $providers;
 
     /**
+     * The logger instance.
+     *
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * A Bus is a collection of handler providers.
      */
     protected function __construct(Provider ...$providers)
     {
         $this->providers = $providers;
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -71,6 +78,16 @@ final class QueryBus
     }
 
     /**
+     * Attach a logger to use with the bus
+     */
+    public function withLogger(LoggerInterface $logger): QueryBus
+    {
+        $bus = clone $this;
+        $bus->logger = $logger;
+        return $bus;
+    }
+
+    /**
      * Pass the DTO through the middleware, if any, then delegate.
      */
     public function dispatch(Query $query): QueryResponse
@@ -93,7 +110,7 @@ final class QueryBus
             try {
                 return $provider->getQueryHandler($query)->handle($query);
             } catch (HandlerNotFound $e) {
-                $this->logger?->info(sprintf("Handler not found by %s", get_class($provider)));
+                $this->logger->info(sprintf("Handler not found by %s", get_class($provider)));
             }
         }
         throw new InvalidHandler("Could not find a handler for " . get_class($query));

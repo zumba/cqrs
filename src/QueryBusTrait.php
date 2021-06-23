@@ -25,8 +25,7 @@ trait QueryBusTrait
         );
         if ($logger) {
             // add logger middleware
-            $logMiddleware = Logger::fromLevel(LogLevel::INFO);
-            $logMiddleware->setLogger($logger);
+            $logMiddleware = Logger::fromLoggerAndLevel($logger, LogLevel::INFO);
             $pipeline = MiddlewarePipeline::fromMiddleware($logMiddleware);
             $bus = $bus->withMiddleware($pipeline);
         }

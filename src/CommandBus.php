@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\Command\CommandResponse;
 use Zumba\CQRS\Command\CommandService;
@@ -15,8 +16,6 @@ use Zumba\CQRS\Provider\SimpleDependencyProvider;
 
 final class CommandBus
 {
-    use LoggerAwareTrait;
-
     /**
      * A middlewarePipeline
      *
@@ -37,12 +36,20 @@ final class CommandBus
     protected $eventRegistryFactory;
 
     /**
+     * The logger instance.
+     *
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * A Bus is a collection of handler providers.
      */
     protected function __construct(Provider ...$providers)
     {
         $this->providers = $providers;
         $this->eventRegistryFactory = new DefaultEventRegistryFactory();
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -73,6 +80,16 @@ final class CommandBus
     {
         $bus = clone $this;
         $bus->eventRegistryFactory = $factory;
+        return $bus;
+    }
+
+    /**
+     * Attach a logger to use with the bus
+     */
+    public function withLogger(LoggerInterface $logger): CommandBus
+    {
+        $bus = clone $this;
+        $bus->logger = $logger;
         return $bus;
     }
 
@@ -123,7 +140,7 @@ final class CommandBus
                 }
                 return $handler->handle($command, CommandService::make($dispatcher, $this));
             } catch (HandlerNotFound $e) {
-                $this->logger?->info(sprintf("Handler not found by %s", get_class($provider)));
+                $this->logger->info(sprintf("Handler not found by %s", get_class($provider)));
             }
         }
         throw new InvalidHandler("Could not find a handler for " . get_class($command));

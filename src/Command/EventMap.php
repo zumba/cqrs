@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Command;
 
-use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Zumba\CQRS\Command\Response\Failure;
 use Zumba\CQRS\CommandBus;
 
 final class EventMap
 {
-    use LoggerAwareTrait;
-
     /**
      * @var array<string, array>
      */
     protected $map;
+
+    /**
+     * The logger instance.
+     *
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * EventMap is a mapping from events to commands
@@ -25,6 +31,7 @@ final class EventMap
     protected function __construct(array $map)
     {
         $this->map = $map;
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -65,6 +72,16 @@ final class EventMap
         }
 
         return new static($list);
+    }
+
+    /**
+     * Attach a logger to use with the event map
+     */
+    public function withLogger(LoggerInterface $logger): EventMap
+    {
+        $map = clone $this;
+        $map->logger = $logger;
+        return $map;
     }
 
     /**
@@ -146,7 +163,7 @@ final class EventMap
     {
         if ($response instanceof Failure) {
             $name = get_class($command);
-            $this->logger?->warning(
+            $this->logger->warning(
                 "Command `$name` dispatched by an event listener failed: " .
                 $response->getError()->getMessage()
             );

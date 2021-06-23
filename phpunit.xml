@@ -16,7 +16,7 @@
         </include>
     </coverage>
     <testsuites>
-        <testsuite name="swivel tests">
+        <testsuite name="CQRS tests">
             <directory>./test</directory>
         </testsuite>
     </testsuites>

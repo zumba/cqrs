@@ -13,10 +13,10 @@ use Zumba\CQRS\EventRegistryFactory;
 use Zumba\CQRS\InvalidHandler;
 use Zumba\CQRS\MiddlewarePipeline;
 use Zumba\CQRS\Provider;
-use Zumba\CQRS\Test\Fixture\EventDispatchingCommandHandler;
-use Zumba\CQRS\Test\Fixture\FailMiddleware;
-use Zumba\CQRS\Test\Fixture\Listener;
-use Zumba\CQRS\Test\Fixture\OkMiddleware;
+use Zumba\CQRS\Test\Stub\EventDispatchingCommandHandler;
+use Zumba\CQRS\Test\Stub\FailMiddleware;
+use Zumba\CQRS\Test\Stub\Listener;
+use Zumba\CQRS\Test\Stub\OkMiddleware;
 use Zumba\Symbiosis\Event\Event;
 use Zumba\Symbiosis\Event\EventRegistry;
 

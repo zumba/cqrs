@@ -10,8 +10,8 @@ use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\HandlerNotFound;
 use Zumba\CQRS\InvalidHandler;
 use Zumba\CQRS\Query\Query;
-use Zumba\CQRS\Test\Fixture\SomeCommand;
-use Zumba\CQRS\Test\Fixture\SomeQuery;
+use Zumba\CQRS\Test\Stub\SomeCommand;
+use Zumba\CQRS\Test\Stub\SomeQuery;
 
 class ClassProviderTest extends TestCase
 {

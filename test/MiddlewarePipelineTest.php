@@ -9,8 +9,8 @@ use Zumba\CQRS\DTO;
 use Zumba\CQRS\MiddlewarePipeline;
 use Zumba\CQRS\NullResponse;
 use Zumba\CQRS\Response;
-use Zumba\CQRS\Test\Fixture\MiddlewarePipeline\Counter;
-use Zumba\CQRS\Test\Fixture\MiddlewarePipeline\Stop;
+use Zumba\CQRS\Test\Stub\MiddlewarePipeline\Counter;
+use Zumba\CQRS\Test\Stub\MiddlewarePipeline\Stop;
 
 class MiddlewarePipelineTest extends TestCase
 {

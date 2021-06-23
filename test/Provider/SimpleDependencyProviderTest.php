@@ -7,13 +7,13 @@ namespace Zumba\CQRS\Test\Provider;
 use PHPUnit\Framework\TestCase;
 use Zumba\CQRS\Provider\InvalidDependency;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\EmptyConstructorCommand;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\EmptyConstructorCommandHandler;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\NonOptionalCommand;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\NotValidCommand;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\OptionalParamConstructorCommand;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\OptionalParamConstructorCommandHandler;
-use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\PrivateConstructorCommand;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\EmptyConstructorCommand;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\EmptyConstructorCommandHandler;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\NonOptionalCommand;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\NotValidCommand;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\OptionalParamConstructorCommand;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\OptionalParamConstructorCommandHandler;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\PrivateConstructorCommand;
 
 class SimpleDependencyProviderTest extends TestCase
 {

@@ -12,8 +12,8 @@ use Zumba\CQRS\Provider;
 use Zumba\CQRS\Query\Handler;
 use Zumba\CQRS\Query\Query;
 use Zumba\CQRS\QueryBus;
-use Zumba\CQRS\Test\Fixture\OkMiddleware;
-use Zumba\CQRS\Test\Fixture\QueryBus\FailQueryMiddleware;
+use Zumba\CQRS\Test\Stub\OkMiddleware;
+use Zumba\CQRS\Test\Stub\QueryBus\FailQueryMiddleware;
 
 class QueryBusTest extends TestCase
 {

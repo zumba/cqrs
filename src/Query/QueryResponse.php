@@ -41,6 +41,8 @@ abstract class QueryResponse implements Response
 
     /**
      * Get a map of key / value pairs. (e.g. data representing an entity)
+     *
+     * @param array<string, mixed> $item
      */
     public static function fromMap(array $item): Map
     {
@@ -49,6 +51,8 @@ abstract class QueryResponse implements Response
 
     /**
      * Get an iterator response from an array. (e.g. a list of things)
+     *
+     * @param array<int, mixed> $items
      */
     public static function fromList(array $items): Iterator
     {
@@ -57,6 +61,8 @@ abstract class QueryResponse implements Response
 
     /**
      * Get an iterator response from an Iterator. (e.g. a generator)
+     *
+     * @param \Iterator<mixed, mixed> $items
      */
     public static function fromIterator(\Iterator $items): Iterator
     {

@@ -14,7 +14,7 @@ use Zumba\CQRS\Test\Fixture\MiddlewarePipeline\Stop;
 
 class MiddlewarePipelineTest extends TestCase
 {
-    public function testMiddlewarePipeline()
+    public function testMiddlewarePipeline(): void
     {
         Counter::$count = 0;
         $pipeline = MiddlewarePipeline::fromMiddleware(
@@ -27,7 +27,7 @@ class MiddlewarePipelineTest extends TestCase
         Counter::$count = 0;
     }
 
-    public function testMiddlewarePipelineWithFinal()
+    public function testMiddlewarePipelineWithFinal(): void
     {
         Counter::$count = 0;
         $pipeline = MiddlewarePipeline::fromMiddleware(
@@ -44,7 +44,7 @@ class MiddlewarePipelineTest extends TestCase
         Counter::$count = 0;
     }
 
-    public function testMiddlewarePipelineWithShortCircuit()
+    public function testMiddlewarePipelineWithShortCircuit(): void
     {
         Counter::$count = 0;
         $pipeline = MiddlewarePipeline::fromMiddleware(

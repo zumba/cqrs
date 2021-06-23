@@ -7,9 +7,11 @@ namespace Zumba\CQRS\Test\Provider;
 use PHPUnit\Framework\TestCase;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\EmptyConstructorCommand;
+use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\EmptyConstructorCommandHandler;
 use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\NonOptionalCommand;
 use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\NotValidCommand;
 use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\OptionalParamConstructorCommand;
+use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\OptionalParamConstructorCommandHandler;
 use Zumba\CQRS\Test\Fixture\SimpleDependencyProvider\PrivateConstructorCommand;
 
 class SimpleDependencyProviderTest extends TestCase
@@ -17,7 +19,7 @@ class SimpleDependencyProviderTest extends TestCase
     /**
      * @expectedException \Zumba\CQRS\Provider\InvalidDependency
      */
-    public function testNonOptionalParam()
+    public function testNonOptionalParam(): void
     {
         $provider = new SimpleDependencyProvider();
         $dto = new NonOptionalCommand();
@@ -27,7 +29,7 @@ class SimpleDependencyProviderTest extends TestCase
     /**
      * @expectedException \Zumba\CQRS\Provider\InvalidDependency
      */
-    public function testNonInstantiable()
+    public function testNonInstantiable(): void
     {
         $provider = new SimpleDependencyProvider();
         $dto = new PrivateConstructorCommand();
@@ -37,21 +39,21 @@ class SimpleDependencyProviderTest extends TestCase
     /**
      * @expectedException \Zumba\CQRS\Provider\InvalidDependency
      */
-    public function testNonValidCommandHandler()
+    public function testNonValidCommandHandler(): void
     {
         $provider = new SimpleDependencyProvider();
         $dto = new NotValidCommand();
         $provider->getCommandHandler($dto);
     }
 
-    public function testEmptyConstructor()
+    public function testEmptyConstructor(): void
     {
         $provider = new SimpleDependencyProvider();
         $dto = new EmptyConstructorCommand();
         $this->assertInstanceOf(EmptyConstructorCommandHandler::class, $provider->getCommandHandler($dto));
     }
 
-    public function testOptionalParamConstructor()
+    public function testOptionalParamConstructor(): void
     {
         $provider = new SimpleDependencyProvider();
         $dto = new OptionalParamConstructorCommand();

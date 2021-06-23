@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Query\Response;
 
-class Scalar extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, Success
+use JsonSerializable;
+use Zumba\CQRS\Query\QueryResponse;
+
+final class Scalar extends QueryResponse implements JsonSerializable, Success
 {
     /**
      * @var mixed any scalar value (integer|float|string|boolean)

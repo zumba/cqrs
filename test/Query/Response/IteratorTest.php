@@ -9,7 +9,7 @@ use Zumba\CQRS\Query\QueryResponse;
 
 class IteratorTest extends TestCase
 {
-    public function testIteratorList()
+    public function testIteratorList(): void
     {
         $response = QueryResponse::fromList([
             [ 'name' => 'The Pick of Destiny'],
@@ -24,11 +24,11 @@ class IteratorTest extends TestCase
         foreach ($response as $item) {
             $this->assertArrayHasKey('name', $item);
         }
-        reset($response);
+        $response->rewind();
         $this->assertCount(3, $response);
     }
 
-    public function testIteratorGenerator()
+    public function testIteratorGenerator(): void
     {
         $system = function () {
             yield "a";

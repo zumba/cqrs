@@ -10,6 +10,11 @@ use Zumba\CQRS\Response;
 
 class Counter implements Middleware
 {
+    /**
+     * Counter for number of middleware
+     *
+     * @var integer
+     */
     public static $count = 0;
 
     public function handle(DTO $dto, callable $next): Response

@@ -10,10 +10,13 @@ use Zumba\CQRS\CommandService;
 
 class NotValidCommandHandler implements \Zumba\CQRS\Command\Handler
 {
+    /** @phpstan-ignore-next-line */
     public function __construct(string $notValid)
     {
     }
+
     public function handle(Command $command, CommandService $commandService): CommandResponse
     {
+        return CommandResponse::fromSuccess();
     }
 }

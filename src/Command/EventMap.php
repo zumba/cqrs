@@ -8,19 +8,19 @@ use Psr\Log\LoggerAwareTrait;
 use Zumba\CQRS\Command\Response\Failure;
 use Zumba\CQRS\CommandBus;
 
-class EventMap
+final class EventMap
 {
     use LoggerAwareTrait;
 
     /**
-     * @var array
+     * @var array<string, array>
      */
     protected $map;
 
     /**
      * EventMap is a mapping from events to commands
      *
-     * @param array $map
+     * @param array<string, array> $map
      */
     protected function __construct(array $map)
     {
@@ -42,6 +42,8 @@ class EventMap
      *     ],
      *     // ...
      * ]
+     *
+     * @param array<string, array> $list
      */
     public static function fromEventList(array $list): EventMap
     {
@@ -68,7 +70,7 @@ class EventMap
     /**
      * Get a map of event names to callables that will handle the events and bus commands
      *
-     * @return array
+     * @return array<string, callable>
      */
     public function mapToBus(CommandBus $bus): array
     {
@@ -82,13 +84,14 @@ class EventMap
     /**
      * Get a listener for a list of commands
      *
+     * @param array<string, array> $commands
      * @return callable
      */
     protected function listener(CommandBus $bus, array $commands): callable
     {
         return function (object $event) use ($bus, $commands): void {
             foreach ($commands as $command => $map) {
-                if (in_array(WithProperties::class, class_implements($command))) {
+                if (in_array(WithProperties::class, class_implements($command) ?: [])) {
                     $instance = ((string)$command)::fromArray($this->transform($event, $map));
                 } else {
                     $instance = new $command();
@@ -101,7 +104,8 @@ class EventMap
     /**
      * Transform an event object to an array of props suitable for a command with properties.
      *
-     * @return array
+     * @param array<string, string> $map
+     * @return array<string, mixed>
      */
     protected function transform(object $event, array $map): array
     {
@@ -123,7 +127,7 @@ class EventMap
      * Transform a value to a scalar or array of scalars.
      *
      * @param mixed $value
-     * @return string|boolean|integer|float|array
+     * @return string|boolean|integer|float|array<mixed>
      */
     protected function transformValue($value)
     {

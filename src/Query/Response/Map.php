@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Query\Response;
 
-class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, \ArrayAccess, Success
+use ArrayAccess;
+use JsonSerializable;
+use Zumba\CQRS\Query\QueryResponse;
+
+/**
+ * @implements ArrayAccess<string, mixed>
+ */
+final class Map extends QueryResponse implements JsonSerializable, ArrayAccess, Success
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $data;
 
@@ -16,6 +23,7 @@ class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, 
      *
      * Use \Zumba\CQRS\Query\QueryResponse::fromMap to create this response object.
      *
+     * @param array<string, mixed> $data
      * @see \Zumba\CQRS\Query\QueryResponse::fromMap
      */
     protected static function fromArray(array $data): Map
@@ -29,9 +37,9 @@ class Map extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable, 
      * JsonSerializable implementation
      *
      * @see \JsonSerializable
-     * @return array
+     * @return array<string, mixed>
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->data;
     }

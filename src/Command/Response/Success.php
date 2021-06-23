@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Command\Response;
 
-class Success extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerializable
+use JsonSerializable;
+use Zumba\CQRS\Command\CommandResponse;
+
+final class Success extends CommandResponse implements JsonSerializable
 {
     /**
      * Create a new Success response.
@@ -22,9 +25,9 @@ class Success extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
      * JsonSerializable implementation
      *
      * @see \JsonSerializable
-     * @return array
+     * @return array<null> Empty array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [];
     }

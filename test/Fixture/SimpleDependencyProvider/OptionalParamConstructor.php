@@ -6,6 +6,7 @@ namespace Zumba\CQRS\Test\Fixture\SimpleDependencyProvider;
 
 class OptionalParamConstructor
 {
+    /** @phpstan-ignore-next-line */
     public function __construct($a = 1, $b = 's')
     {
     }

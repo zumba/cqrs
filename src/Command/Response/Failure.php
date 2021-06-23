@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Command\Response;
 
-class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerializable
+use JsonSerializable;
+use Throwable;
+use Zumba\CQRS\Command\CommandResponse;
+
+final class Failure extends CommandResponse implements JsonSerializable
 {
     /**
      * @var \Throwable
@@ -12,7 +16,7 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
     protected $error;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $meta = [];
 
@@ -23,7 +27,7 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
      *
      * @see \Zumba\CQRS\Command\CommandResponse::fromThrowable
      */
-    protected static function make(\Throwable $error): Failure
+    protected static function make(Throwable $error): Failure
     {
         $response = new static();
         $response->error = $error;
@@ -33,13 +37,15 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
     /**
      * Get the Throwable.
      */
-    public function getError(): \Throwable
+    public function getError(): Throwable
     {
         return $this->error;
     }
 
     /**
      * Get meta data associated to the failure.
+     *
+     * @return array<mixed>
      */
     public function getMeta(): array
     {
@@ -48,6 +54,8 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
 
     /**
      * Failure instance with additional meta data.
+     *
+     * @param array<mixed> $meta
      */
     public function withMeta(array $meta): Failure
     {
@@ -60,9 +68,9 @@ class Failure extends \Zumba\CQRS\Command\CommandResponse implements \JsonSerial
      * JsonSerializable implementation
      *
      * @see \JsonSerializable
-     * @return array
+     * @return array<string, mixed>
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'error' => $this->error->getMessage(),

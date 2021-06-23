@@ -11,7 +11,7 @@ use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use Zumba\CQRS\Query\Query;
 use Zumba\CQRS\Query\QueryResponse;
 
-class QueryBus
+final class QueryBus
 {
     use LoggerAwareTrait;
 
@@ -25,7 +25,7 @@ class QueryBus
     /**
      * Handler providers
      *
-     * @var array
+     * @var Provider[]
      */
     protected $providers;
 

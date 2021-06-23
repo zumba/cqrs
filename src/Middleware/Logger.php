@@ -10,7 +10,7 @@ use Zumba\CQRS\DTO;
 use Zumba\CQRS\Middleware;
 use Zumba\CQRS\Response;
 
-class Logger implements Middleware
+final class Logger implements Middleware
 {
     use LoggerAwareTrait;
 

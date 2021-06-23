@@ -17,14 +17,14 @@ class ClassProviderTest extends TestCase
     public function testGetHandler(): void
     {
         $provider = new ClassProvider();
-        /** @var Command|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Command&\PHPUnit\Framework\MockObject\MockObject */
         $command = $this->getMockBuilder(Command::class)->getMock();
         try {
             $provider->getCommandHandler($command);
         } catch (\Exception $e) {
             $this->assertInstanceOf(HandlerNotFound::class, $e);
         }
-        /** @var Query|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
         $query = $this->getMockBuilder(Query::class)->getMock();
         try {
             $provider->getQueryHandler($query);
@@ -36,7 +36,7 @@ class ClassProviderTest extends TestCase
     /**
      * @expectedException \Zumba\CQRS\InvalidHandler
      */
-    public function testGetHandlerThrowsIfNotImplemented()
+    public function testGetHandlerThrowsIfNotImplemented(): void
     {
         $provider = new ClassProvider();
         $command = new SomeCommand();
@@ -46,7 +46,7 @@ class ClassProviderTest extends TestCase
     /**
      * @expectedException \Zumba\CQRS\InvalidHandler
      */
-    public function testGetHandlerThrowsIfNotImplementedQuery()
+    public function testGetHandlerThrowsIfNotImplementedQuery(): void
     {
         $provider = new ClassProvider();
         $command = new SomeQuery();

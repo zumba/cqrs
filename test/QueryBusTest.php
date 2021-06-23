@@ -16,20 +16,20 @@ use Zumba\CQRS\Test\Fixture\OkMiddleware;
 
 class QueryBusTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
-        /** @var Query|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
         $Query = $this->getMockBuilder(Query::class)->getMock();
 
         $handler = $this->getMockBuilder(Handler::class)
             ->getMock();
 
-        /** @var Provider|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
         $providerNotFound = $this->getMockBuilder(Provider::class)
             ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
             ->getMock();
 
-        /** @var Provider|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
         $provider = $this->getMockBuilder(Provider::class)
             ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
             ->getMock();
@@ -60,12 +60,12 @@ class QueryBusTest extends TestCase
         $bus->withMiddleware($pipeline)->dispatch($Query);
     }
 
-    public function testHandleMiddlewareFailure()
+    public function testHandleMiddlewareFailure(): void
     {
-        /** @var Query|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
         $Query = $this->getMockBuilder(Query::class)->getMock();
 
-        /** @var Provider|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
         $provider = $this->getMockBuilder(Provider::class)
             ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
             ->getMock();
@@ -86,11 +86,11 @@ class QueryBusTest extends TestCase
     /**
      * @expectedException \Zumba\CQRS\InvalidHandler
      */
-    public function testDelegateNotFound()
+    public function testDelegateNotFound(): void
     {
-        /** @var Query|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Query&\PHPUnit\Framework\MockObject\MockObject */
         $dto = $this->getMockBuilder(Query::class)->getMock();
-        /** @var Provider|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Provider&\PHPUnit\Framework\MockObject\MockObject */
         $provider = $this->getMockBuilder(Provider::class)
             ->onlyMethods(['getQueryHandler', 'getCommandHandler'])
             ->getMock();

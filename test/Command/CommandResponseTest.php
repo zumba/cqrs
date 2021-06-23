@@ -11,11 +11,12 @@ use Zumba\CQRS\Command\Response\Success;
 
 class CommandResponseTest extends TestCase
 {
-    public function testOk()
+    public function testOk(): void
     {
         $this->assertInstanceOf(Success::class, CommandResponse::fromSuccess());
     }
-    public function testFail()
+
+    public function testFail(): void
     {
         $this->assertInstanceOf(Failure::class, CommandResponse::fromThrowable(new \Exception()));
     }

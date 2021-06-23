@@ -20,6 +20,7 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider
     /**
      * Extract the factory name from the DTO and return it.
      *
+     * @return class-string
      * @throws HandlerNotFound if the class does not exist.
      * @throws InvalidHandler if a handler factory class does not implement the correct interface.
      */
@@ -29,7 +30,7 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider
         if (!class_exists($handler)) {
             throw new HandlerNotFound();
         }
-        if (!in_array($handlerInterface, class_implements($handler))) {
+        if (!in_array($handlerInterface, class_implements($handler) ?: [])) {
             throw new InvalidHandler("$handler exists, but it does not implement $handlerInterface");
         }
         return $handler;
@@ -58,8 +59,10 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider
     /**
      * Extract model Dependencies
      *
+     * @template T
+     * @param class-string<T> $className
+     * @return array<int, mixed> List of class objects
      * @throws InvalidDependency if you're doing something wrong.
-     * @return array of zumba models
      */
     protected static function extract(string $className): array
     {

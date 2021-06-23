@@ -27,7 +27,7 @@
         ],
         "cs-check": "phpcs --standard=PSR12 src test",
         "cs-fix": "phpcbf --standard=PSR12 src test",
-        "phpstan": "phpstan analyze src test",
+        "phpstan": "phpstan analyze -c phpstan.neon",
         "test": "phpunit"
     }
 }

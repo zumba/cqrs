@@ -29,7 +29,7 @@ interface ClientData
     /**
      * Properties for the DTO other than locale, ip, userAgent, or membershipType.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function properties(): array;
 }

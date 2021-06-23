@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Query\Response;
 
-class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializable
+use JsonSerializable;
+use Throwable;
+use Zumba\CQRS\Query\QueryResponse;
+use Zumba\CQRS\Query\Response\Failure as ResponseFailure;
+
+final class Failure extends QueryResponse implements JsonSerializable
 {
     /**
      * @var \Throwable
@@ -12,7 +17,7 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
     protected $error;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $meta = [];
 
@@ -23,7 +28,7 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
      *
      * @see \Zumba\CQRS\Query\QueryResponse::fromThrowable
      */
-    protected static function make(\Throwable $error): Failure
+    protected static function make(Throwable $error): Failure
     {
         $response = new static();
         $response->error = $error;
@@ -33,7 +38,7 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
     /**
      * Get the Throwable.
      */
-    public function getError(): \Throwable
+    public function getError(): Throwable
     {
         return $this->error;
     }
@@ -42,9 +47,9 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
      * JsonSerializable implementation
      *
      * @see \JsonSerializable
-     * @return array
+     * @return array<string, string>
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $error = $this->error->getMessage();
         return compact('error');
@@ -52,6 +57,8 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 
     /**
      * Get meta data associated to the failure.
+     *
+     * @return array<string, mixed>
      */
     public function getMeta(): array
     {
@@ -60,8 +67,10 @@ class Failure extends \Zumba\CQRS\Query\QueryResponse implements \JsonSerializab
 
     /**
      * Failure instance with additional meta data.
+     *
+     * @param array<string, mixed> $meta
      */
-    public function withMeta(array $meta): \Zumba\CQRS\Query\Response\Failure
+    public function withMeta(array $meta): ResponseFailure
     {
         $failure = clone $this;
         $failure->meta = $meta;

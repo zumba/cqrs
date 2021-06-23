@@ -6,7 +6,8 @@ namespace Zumba\CQRS\Test\Fixture\SimpleDependencyProvider;
 
 class EmptyConstructor
 {
-    public function funcA($arg1, $arg2)
+    /** @phpstan-ignore-next-line */
+    public function funcA($arg1, $arg2): void
     {
     }
 }

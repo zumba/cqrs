@@ -6,8 +6,9 @@ namespace Zumba\CQRS\Command;
 
 use Zumba\CQRS\CommandBus;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Zumba\CQRS\CommandService as CQRSCommandService;
 
-class CommandService implements \Zumba\CQRS\CommandService
+final class CommandService implements CQRSCommandService
 {
     /**
      * An event dispatcher interface

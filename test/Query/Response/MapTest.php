@@ -9,7 +9,7 @@ use Zumba\CQRS\Query\QueryResponse;
 
 class MapTest extends TestCase
 {
-    public function testMap()
+    public function testMap(): void
     {
         $response = QueryResponse::fromMap([ 'name' => 'Goliathan' ]);
         $this->assertSame('{"name":"Goliathan"}', json_encode($response));

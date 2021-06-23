@@ -7,12 +7,13 @@ namespace Zumba\CQRS;
 use Psr\Log\LoggerAwareTrait;
 use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\Command\CommandResponse;
+use Zumba\CQRS\Command\CommandService;
 use Zumba\CQRS\Command\EventMapperProvider;
 use Zumba\CQRS\Provider\ClassProvider;
 use Zumba\CQRS\Provider\MethodProvider;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
 
-class CommandBus
+final class CommandBus
 {
     use LoggerAwareTrait;
 
@@ -26,7 +27,7 @@ class CommandBus
     /**
      * Handler providers
      *
-     * @var array
+     * @var Provider[]
      */
     protected $providers;
 
@@ -112,14 +113,15 @@ class CommandBus
             try {
                 $dispatcher = $this->eventRegistryFactory->make();
                 $handler = $provider->getCommandHandler($command);
-                $interfaces = class_implements($handler);
+                $interfaces = class_implements($handler) ?: [];
                 if (in_array(EventMapperProvider::class, $interfaces)) {
+                    /** @var EventMapperProvider&\Zumba\CQRS\Command\Handler $handler */
                     $listeners = $handler->eventMapper()->eventMap()->mapToBus($this);
                     foreach ($listeners as $event => $listener) {
                         $dispatcher->register($event, $listener);
                     }
                 }
-                return $handler->handle($command, \Zumba\CQRS\Command\CommandService::make($dispatcher, $this));
+                return $handler->handle($command, CommandService::make($dispatcher, $this));
             } catch (HandlerNotFound $e) {
                 $this->logger?->info(sprintf("Handler not found by %s", get_class($provider)));
             }

@@ -11,10 +11,13 @@ use Zumba\CQRS\CommandService;
 
 class OptionalParamConstructorCommandHandler implements Handler
 {
+    /** @phpstan-ignore-next-line */
     public function __construct(OptionalParamConstructor $simpleDependency)
     {
     }
+
     public function handle(Command $command, CommandService $commandService): CommandResponse
     {
+        return CommandResponse::fromSuccess();
     }
 }

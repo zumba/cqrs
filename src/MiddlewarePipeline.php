@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS;
 
-class MiddlewarePipeline
+final class MiddlewarePipeline
 {
     /**
      * A middleware Closure
@@ -16,7 +16,7 @@ class MiddlewarePipeline
     /**
      * A final callable to execute after all middleware execute.
      *
-     * @var callable
+     * @var callable|null
      */
     protected $final;
 

@@ -9,7 +9,7 @@ use Zumba\CQRS\Query\QueryResponse;
 
 class ScalarTest extends TestCase
 {
-    public function testScalar()
+    public function testScalar(): void
     {
         $response = QueryResponse::fromScalar(1000);
         $this->assertSame("1000", json_encode($response));

@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Query\Response;
 
-class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \JsonSerializable, \Countable, Success
+use Countable;
+use Iterator as GlobalIterator;
+use JsonSerializable;
+use Zumba\CQRS\Query\QueryResponse;
+
+/**
+ * @implements GlobalIterator<int, mixed>
+ */
+final class Iterator extends QueryResponse implements GlobalIterator, JsonSerializable, Countable, Success
 {
     /**
-     * @var \Iterator
+     * @var \Iterator<int, mixed>
      */
     protected $data;
 
     /**
      * Data that has been expanded from the iterator/generator.
      *
-     * @var array
+     * @var array<int, mixed>
      */
     protected $iteratedData = [];
 
@@ -30,6 +38,8 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
      *
      * Use \Zumba\CQRS\Query\QueryResponse::fromList to create this response object.
      *
+     * @param array<int, mixed> $data
+     * @return Iterator<int, mixed>
      * @see \Zumba\CQRS\Query\QueryResponse::fromList
      */
     protected static function fromArray(array $data): Iterator
@@ -44,9 +54,11 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
      *
      * Use \Zumba\CQRS\Query\QueryResponse::fromIterator to create this response object.
      *
+     * @param GlobalIterator<int, mixed> $data
+     * @return Iterator<int, mixed>
      * @see \Zumba\CQRS\Query\QueryResponse::fromIterator
      */
-    public static function fromIterator(\Iterator $data): Iterator
+    public static function fromIterator(GlobalIterator $data): Iterator
     {
         $response = new static();
         $response->data = $data;
@@ -57,9 +69,9 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
      * JsonSerializable implementation
      *
      * @see \JsonSerializable
-     * @return array
+     * @return array<int, mixed>
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->iterateData();
     }
@@ -75,7 +87,7 @@ class Iterator extends \Zumba\CQRS\Query\QueryResponse implements \Iterator, \Js
     /**
      * Retrieve iterator data into array.
      *
-     * @return array[int][mixed]
+     * @return array<int, mixed>
      */
     private function iterateData(): array
     {

@@ -30,9 +30,9 @@ class ClassProvider implements Provider
     {
         $factory = get_class($dto) . "HandlerFactory";
         if (!class_exists($factory)) {
-            throw new \Zumba\CQRS\HandlerNotFound();
+            throw new HandlerNotFound();
         }
-        if (!in_array($factoryInterface, class_implements($factory))) {
+        if (!in_array($factoryInterface, class_implements($factory) ?: [])) {
             throw new InvalidHandler("$factory exists, but it does not implement $factoryInterface");
         }
         return $factory;

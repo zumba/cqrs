@@ -30,7 +30,7 @@ class MethodProvider implements Provider
         if (!class_exists($factory)) {
             throw new HandlerNotFound();
         }
-        if (!in_array($factoryInterface, class_implements($factory))) {
+        if (!in_array($factoryInterface, class_implements($factory) ?: [])) {
             throw new HandlerNotFound();
         }
         return $factory;

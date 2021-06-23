@@ -11,11 +11,13 @@ use Zumba\CQRS\CommandService;
 
 class PrivateConstructorCommandHandler implements Handler
 {
+    /** @phpstan-ignore-next-line */
     public function __construct(PrivateConstructor $notSimple)
     {
     }
 
     public function handle(Command $command, CommandService $commandService): CommandResponse
     {
+        return CommandResponse::fromSuccess();
     }
 }

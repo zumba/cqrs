@@ -9,7 +9,7 @@ use Zumba\CQRS\Query\QueryResponse;
 
 class FailureTest extends TestCase
 {
-    public function testError()
+    public function testError(): void
     {
         $e = new \Exception('test');
         $response = QueryResponse::fromThrowable($e);

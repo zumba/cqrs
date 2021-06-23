@@ -11,10 +11,13 @@ use Zumba\CQRS\Command\Handler;
 
 class NonOptionalCommandHandler implements Handler
 {
+    /** @phpstan-ignore-next-line */
     public function __construct(NonOptionalParamConstructor $notSimple)
     {
     }
+
     public function handle(Command $command, CommandService $commandService): CommandResponse
     {
+        return CommandResponse::fromSuccess();
     }
 }

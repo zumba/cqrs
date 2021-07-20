@@ -9,6 +9,7 @@ use Zumba\CQRS\Provider\InvalidDependency;
 use Zumba\CQRS\Provider\SimpleDependencyProvider;
 use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\EmptyConstructorCommand;
 use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\EmptyConstructorCommandHandler;
+use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\MultiTypeCommand;
 use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\NonOptionalCommand;
 use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\NotValidCommand;
 use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\OptionalParamConstructorCommand;
@@ -17,26 +18,18 @@ use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\PrivateConstructorCommand;
 
 class SimpleDependencyProviderTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $existingErrorLevel;
 
-    public function setUp(): void
+    public function testMultiTypeParam(): void
     {
-        parent::setUp();
-        $this->existingErrorLevel = error_reporting();
-        // for now, ignore deprecated errors: to avoid error in most of the tests:
-        // Method ReflectionParameter::getClass() is deprecated
-        // todo: refactor to not use getClass anymore, then remove this work-around
-        error_reporting($this->existingErrorLevel & ~E_DEPRECATED);
-    }
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            $this->markTestSkipped('Test only application to PHP 8.0+.');
+        }
 
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        // restore original error reporting level
-        error_reporting($this->existingErrorLevel);
+        $provider = new SimpleDependencyProvider();
+        $dto = new MultiTypeCommand();
+        $this->expectException(InvalidDependency::class);
+        $this->expectExceptionMessage("Don't be a night elf! `\$multiType` has multiple types.");
+        $provider->getCommandHandler($dto);
     }
 
     public function testNonOptionalParam(): void
@@ -44,6 +37,8 @@ class SimpleDependencyProviderTest extends TestCase
         $provider = new SimpleDependencyProvider();
         $dto = new NonOptionalCommand();
         $this->expectException(InvalidDependency::class);
+        $testingClass = 'Zumba\CQRS\Test\Stub\SimpleDependencyProvider\NonOptionalParamConstructor';
+        $this->expectExceptionMessage("Don't be a night elf! `{$testingClass} \$notSimple` has required params.");
         $provider->getCommandHandler($dto);
     }
 
@@ -52,6 +47,8 @@ class SimpleDependencyProviderTest extends TestCase
         $provider = new SimpleDependencyProvider();
         $dto = new PrivateConstructorCommand();
         $this->expectException(InvalidDependency::class);
+        $testingClass = 'Zumba\CQRS\Test\Stub\SimpleDependencyProvider\PrivateConstructor';
+        $this->expectExceptionMessage("Don't be a night elf! `{$testingClass} \$notSimple` cannot be instantiated.");
         $provider->getCommandHandler($dto);
     }
 
@@ -60,6 +57,7 @@ class SimpleDependencyProviderTest extends TestCase
         $provider = new SimpleDependencyProvider();
         $dto = new NotValidCommand();
         $this->expectException(InvalidDependency::class);
+        $this->expectExceptionMessage("Don't be a night elf! `\$notValid` typehint is not a valid class.");
         $provider->getCommandHandler($dto);
     }
 

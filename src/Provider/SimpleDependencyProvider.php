@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zumba\CQRS\Provider;
 
+use ReflectionClass;
+use ReflectionNamedType;
 use Zumba\CQRS\Command\Command;
 use Zumba\CQRS\Command\Handler as CommandHandler;
 use Zumba\CQRS\DTO;
@@ -66,7 +68,7 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider
      */
     protected static function extract(string $className): array
     {
-        $image = new \ReflectionClass($className);
+        $image = new ReflectionClass($className);
         $constructor = $image->getConstructor();
         if ($constructor === null) {
             return [];
@@ -77,11 +79,16 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider
         }
         $dependencies = [];
         foreach ($parameters as $parameter) {
-            $dependency = $parameter->getClass();
-            if ($dependency === null) {
+            $dependencyType = $parameter->getType();
+            if ($dependencyType === null) {
                 static::fail($parameter);
                 return [];
             }
+            if (!$dependencyType instanceof ReflectionNamedType || !class_exists($dependencyType->getName())) {
+                static::fail($parameter);
+                return [];
+            }
+            $dependency = new ReflectionClass($dependencyType->getName());
             if (!$dependency->isInstantiable()) {
                 static::fail($parameter);
                 return [];
@@ -117,22 +124,30 @@ class SimpleDependencyProvider implements \Zumba\CQRS\Provider
      */
     protected static function fail(\ReflectionParameter $parameter): void
     {
-        if (is_null($parameter->getClass())) {
+        $parameterType = $parameter->getType();
+        if (!$parameterType instanceof ReflectionNamedType) {
             throw new InvalidDependency(sprintf(
-                "Don't be a night elf! `%s` is not a valid class.",
+                "Don't be a night elf! `\$%s` has multiple types.",
                 $parameter->getName()
             ));
         }
-        if (!$parameter->getClass()->isInstantiable()) {
+        if (!class_exists($parameterType->getName())) {
+            throw new InvalidDependency(sprintf(
+                "Don't be a night elf! `\$%s` typehint is not a valid class.",
+                $parameter->getName()
+            ));
+        }
+        $parameterClass = new ReflectionClass($parameterType->getName());
+        if (!$parameterClass->isInstantiable()) {
             throw new InvalidDependency(sprintf(
                 "Don't be a night elf! `%s %s` cannot be instantiated.",
-                $parameter->getClass()->getName(),
+                $parameterClass->getName(),
                 "$" . $parameter->getName()
             ));
         }
         throw new InvalidDependency(sprintf(
             "Don't be a night elf! `%s %s` has required params.",
-            $parameter->getClass()->getName(),
+            $parameterClass->getName(),
             "$" . $parameter->getName()
         ));
     }

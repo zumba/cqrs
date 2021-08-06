@@ -96,7 +96,7 @@ final class EventMap
     public function withAppendedData(string $eventKey, string $commandKey, array $values): EventMap
     {
         $map = clone $this;
-        foreach($values as $propKey => $prop) {
+        foreach ($values as $propKey => $prop) {
             $map->appendedData[$eventKey][$commandKey][$propKey] = $this->transformValue($prop);
         }
         return $map;

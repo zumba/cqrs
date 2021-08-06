@@ -17,6 +17,11 @@ final class EventMap
     protected $map;
 
     /**
+     * @var array<string, array>
+     */
+    protected $appendedData = [];
+
+    /**
      * The logger instance.
      *
      * @var LoggerInterface
@@ -85,6 +90,19 @@ final class EventMap
     }
 
     /**
+     * Attach explicit / arbitrary values to en event map
+     * The listening map should know very little about the event it is listening for
+     */
+    public function withAppendedData(string $eventKey, string $commandKey, array $values): EventMap
+    {
+        $map = clone $this;
+        foreach($values as $propKey => $prop) {
+            $map->appendedData[$eventKey][$commandKey][$propKey] = $this->transformValue($prop);
+        }
+        return $map;
+    }
+
+    /**
      * Get a map of event names to callables that will handle the events and bus commands
      *
      * @return array<string, callable>
@@ -93,7 +111,8 @@ final class EventMap
     {
         $list = [];
         foreach ($this->map as $event => $commands) {
-            $list[$event] = $this->listener($bus, $commands);
+            $extraData = $this->appendedData[$event] ?? [];
+            $list[$event] = $this->listener($bus, $commands, $extraData);
         }
         return $list;
     }
@@ -104,12 +123,14 @@ final class EventMap
      * @param array<string, array> $commands
      * @return callable
      */
-    protected function listener(CommandBus $bus, array $commands): callable
+    protected function listener(CommandBus $bus, array $commands, array $extraData = []): callable
     {
-        return function (object $event) use ($bus, $commands): void {
+        return function (object $event) use ($bus, $commands, $extraData): void {
             foreach ($commands as $command => $map) {
                 if (in_array(WithProperties::class, class_implements($command) ?: [])) {
-                    $instance = ((string)$command)::fromArray($this->transform($event, $map));
+                    $extraProps = $extraData[$command] ?? [];
+                    $props = $this->transform($event, $map) + $extraProps;
+                    $instance = ((string)$command)::fromArray($props);
                 } else {
                     $instance = new $command();
                 }

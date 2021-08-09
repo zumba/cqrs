@@ -17,6 +17,11 @@ final class EventMap
     protected $map;
 
     /**
+     * @var array<string, array>
+     */
+    protected $staticProperties = [];
+
+    /**
      * The logger instance.
      *
      * @var LoggerInterface
@@ -85,6 +90,19 @@ final class EventMap
     }
 
     /**
+     * Attach explicit / arbitrary values to en event map
+     * The listening map should know very little about the event it is listening for
+     *
+     * @param array<string, array> $properties
+     */
+    public function withStaticProperties(array $properties): EventMap
+    {
+        $eventMap = clone $this;
+        $eventMap->staticProperties = $properties;
+        return $eventMap;
+    }
+
+    /**
      * Get a map of event names to callables that will handle the events and bus commands
      *
      * @return array<string, callable>
@@ -109,7 +127,15 @@ final class EventMap
         return function (object $event) use ($bus, $commands): void {
             foreach ($commands as $command => $map) {
                 if (in_array(WithProperties::class, class_implements($command) ?: [])) {
-                    $instance = ((string)$command)::fromArray($this->transform($event, $map));
+                    if ($event instanceof \Zumba\Symbiosis\Framework\EventInterface) {
+                        $commandsWithStaticProps = $this->staticProperties[$event->name()] ?? [];
+                        $staticProperties = $commandsWithStaticProps[$command] ?? [];
+                        foreach ($staticProperties as $key => $val) {
+                            $staticProperties[$key] = $this->transformValue($val);
+                        }
+                    }
+                    $props = $this->transform($event, $map) + ($staticProperties ?? []);
+                    $instance = ((string)$command)::fromArray($props);
                 } else {
                     $instance = new $command();
                 }

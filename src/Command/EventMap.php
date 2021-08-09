@@ -127,12 +127,14 @@ final class EventMap
         return function (object $event) use ($bus, $commands): void {
             foreach ($commands as $command => $map) {
                 if (in_array(WithProperties::class, class_implements($command) ?: [])) {
-                    $commandsWithStaticProps = $this->staticProperties[$event->name()] ?? [];
-                    $staticProperties = $commandsWithStaticProps[$command] ?? [];
-                    foreach ($staticProperties as $key => $val) {
-                        $staticProperties[$key] = $this->transformValue($val);
+                    if ($event instanceof \Zumba\Symbiosis\Framework\EventInterface) {
+                        $commandsWithStaticProps = $this->staticProperties[$event->name()] ?? [];
+                        $staticProperties = $commandsWithStaticProps[$command] ?? [];
+                        foreach ($staticProperties as $key => $val) {
+                            $staticProperties[$key] = $this->transformValue($val);
+                        }
                     }
-                    $props = $this->transform($event, $map) + $staticProperties;
+                    $props = $this->transform($event, $map) + ($staticProperties ?? []);
                     $instance = ((string)$command)::fromArray($props);
                 } else {
                     $instance = new $command();

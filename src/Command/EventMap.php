@@ -19,7 +19,7 @@ final class EventMap
     /**
      * @var array<string, array>
      */
-    protected $appendedData = [];
+    protected $staticProperties = [];
 
     /**
      * The logger instance.
@@ -93,15 +93,13 @@ final class EventMap
      * Attach explicit / arbitrary values to en event map
      * The listening map should know very little about the event it is listening for
      *
-     * @param array<string, mixed> $values
+     * @param array<string, mixed> $properties
      */
-    public function withAppendedData(string $eventKey, string $commandKey, array $values): EventMap
+    public function withStaticProperties(array $properties): EventMap
     {
-        $map = clone $this;
-        foreach ($values as $propKey => $prop) {
-            $map->appendedData[$eventKey][$commandKey][$propKey] = $this->transformValue($prop);
-        }
-        return $map;
+        $eventMap = clone $this;
+        $eventMap->staticProperties = $properties;
+        return $eventMap;
     }
 
     /**
@@ -113,8 +111,8 @@ final class EventMap
     {
         $list = [];
         foreach ($this->map as $event => $commands) {
-            $extraData = $this->appendedData[$event] ?? [];
-            $list[$event] = $this->listener($bus, $commands, $extraData);
+            $extraProperties = $this->staticProperties[$event] ?? [];
+            $list[$event] = $this->listener($bus, $commands, $extraProperties);
         }
         return $list;
     }
@@ -132,6 +130,9 @@ final class EventMap
             foreach ($commands as $command => $map) {
                 if (in_array(WithProperties::class, class_implements($command) ?: [])) {
                     $extraProps = $extraData[$command] ?? [];
+                    foreach($extraProps as $key => $val) {
+                        $extraProps[$key] = $this->transformValue($val);
+                    }
                     $props = $this->transform($event, $map) + $extraProps;
                     $instance = ((string)$command)::fromArray($props);
                 } else {

@@ -111,8 +111,7 @@ final class EventMap
     {
         $list = [];
         foreach ($this->map as $event => $commands) {
-            $extraProperties = $this->staticProperties[$event] ?? [];
-            $list[$event] = $this->listener($bus, $commands, $extraProperties);
+            $list[$event] = $this->listener($bus, $commands);
         }
         return $list;
     }
@@ -121,19 +120,19 @@ final class EventMap
      * Get a listener for a list of commands
      *
      * @param array<string, array> $commands
-     * @param array<string, array> $staticProperties
      * @return callable
      */
-    protected function listener(CommandBus $bus, array $commands, array $staticProperties = []): callable
+    protected function listener(CommandBus $bus, array $commands): callable
     {
-        return function (object $event) use ($bus, $commands, $staticProperties): void {
+        return function (object $event) use ($bus, $commands): void {
             foreach ($commands as $command => $map) {
                 if (in_array(WithProperties::class, class_implements($command) ?: [])) {
-                    $extraProps = $staticProperties[$command] ?? [];
-                    foreach ($extraProps as $key => $val) {
-                        $extraProps[$key] = $this->transformValue($val);
+                    $commandsWithStaticProps = $this->staticProperties[$event->name()] ?? [];
+                    $staticProperties = $commandsWithStaticProps[$command] ?? [];
+                    foreach ($staticProperties as $key => $val) {
+                        $staticProperties[$key] = $this->transformValue($val);
                     }
-                    $props = $this->transform($event, $map) + $extraProps;
+                    $props = $this->transform($event, $map) + $staticProperties;
                     $instance = ((string)$command)::fromArray($props);
                 } else {
                     $instance = new $command();

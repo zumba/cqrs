@@ -121,16 +121,16 @@ final class EventMap
      * Get a listener for a list of commands
      *
      * @param array<string, array> $commands
-     * @param array<string, mixed> $extraData
+     * @param array<string, mixed> $staticProperties
      * @return callable
      */
-    protected function listener(CommandBus $bus, array $commands, array $extraData = []): callable
+    protected function listener(CommandBus $bus, array $commands, array $staticProperties = []): callable
     {
-        return function (object $event) use ($bus, $commands, $extraData): void {
+        return function (object $event) use ($bus, $commands, $staticProperties): void {
             foreach ($commands as $command => $map) {
                 if (in_array(WithProperties::class, class_implements($command) ?: [])) {
-                    $extraProps = $extraData[$command] ?? [];
-                    foreach($extraProps as $key => $val) {
+                    $extraProps = $staticProperties[$command] ?? [];
+                    foreach ($extraProps as $key => $val) {
                         $extraProps[$key] = $this->transformValue($val);
                     }
                     $props = $this->transform($event, $map) + $extraProps;

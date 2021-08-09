@@ -93,7 +93,7 @@ final class EventMap
      * Attach explicit / arbitrary values to en event map
      * The listening map should know very little about the event it is listening for
      *
-     * @param array<string, mixed> $properties
+     * @param array<string, array> $properties
      */
     public function withStaticProperties(array $properties): EventMap
     {
@@ -121,7 +121,7 @@ final class EventMap
      * Get a listener for a list of commands
      *
      * @param array<string, array> $commands
-     * @param array<string, mixed> $staticProperties
+     * @param array<string, array> $staticProperties
      * @return callable
      */
     protected function listener(CommandBus $bus, array $commands, array $staticProperties = []): callable

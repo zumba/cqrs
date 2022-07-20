@@ -18,7 +18,6 @@ use Zumba\CQRS\Test\Stub\SimpleDependencyProvider\PrivateConstructorCommand;
 
 class SimpleDependencyProviderTest extends TestCase
 {
-
     public function testMultiTypeParam(): void
     {
         if (version_compare(PHP_VERSION, '8.0.0', '<')) {

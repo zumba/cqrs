@@ -261,12 +261,12 @@ final class MyCommandHandler implements Handler, HandlerFactory
 
 ### Simple Dependency Provider
 
-If cases where all dependencies can be instantiated without parameters, the `Zumba\CQRS\Provider\SimpleDependencyProvider` can be used to construct the handler without the need of a `HandlerFactory`.
+In cases where all dependencies can be instantiated without parameters, the `Zumba\CQRS\Provider\SimpleDependencyProvider` can be used to construct the handler without the need of a `HandlerFactory`.
 
 ### Create a custom provider
 
 To create your own custom provider, implement the `Zumba\CQRS\Provider` interface and create the bus with the custom provider.
-You can also provide additional providers in which to fallback on if your CustomProvider can't accommodate the DTO.
+You can also provide additional providers to fallback on if your CustomProvider can't accommodate the DTO.
 
 ```php
 <?php

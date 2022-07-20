@@ -8,5 +8,4 @@ use Zumba\CQRS\Query\Query;
 
 class SomeQuery extends Query
 {
-
 }

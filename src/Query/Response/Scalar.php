@@ -40,7 +40,7 @@ final class Scalar extends QueryResponse implements JsonSerializable, Success
      *
      * @return mixed any scalar value (integer|float|string|boolean)
      */
-    public function value()
+    public function value(): mixed
     {
         return $this->value;
     }
@@ -51,7 +51,7 @@ final class Scalar extends QueryResponse implements JsonSerializable, Success
      * @see \JsonSerializable
      * @return mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->value;
     }

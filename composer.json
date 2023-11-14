@@ -5,7 +5,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.0",
         "zumba/symbiosis": "^3.0"
     },
     "require-dev": {

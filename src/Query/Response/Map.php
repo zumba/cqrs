@@ -67,7 +67,7 @@ final class Map extends QueryResponse implements JsonSerializable, ArrayAccess, 
      * @return mixed
      * @see \ArrayAccess
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->data[$offset] ?? null;
     }

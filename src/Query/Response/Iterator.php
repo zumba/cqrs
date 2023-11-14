@@ -114,7 +114,7 @@ final class Iterator extends QueryResponse implements GlobalIterator, JsonSerial
      * @return mixed
      * @see \Iterator
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->data->current();
     }
@@ -125,7 +125,7 @@ final class Iterator extends QueryResponse implements GlobalIterator, JsonSerial
      * @return mixed (scalar)
      * @see \Iterator
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->data->key();
     }
